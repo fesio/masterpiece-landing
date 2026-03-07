@@ -1,0 +1,55 @@
+name: Omnipotence - Autonomous CI/CD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'github-actions-sa@kryptobot-454807.iam.gserviceaccount.com'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Docker Auth
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+
+      - name: Detect Changes and Selective Deploy
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'internal/domain/trading'; then
+            echo "Deploying Trading Microservice..."
+            # logic for trading deploy
+          fi
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'internal/domain/security'; then
+            echo "Deploying Security Auditor..."
+          fi
+
+      - name: Build and Push
+        run: |
+          docker build -t us-central1-docker.pkg.dev/kryptobot-454807/artifact-registry/engine:${{ github.sha }} .
+          docker push us-central1-docker.pkg.dev/kryptobot-454807/artifact-registry/engine:${{ github.sha }}
+
+      - name: Deploy to GKE
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: kryptobot-cluster
+          location: us-central1
+      
+      - name: Apply Manifests
+        run: kubectl apply -f k8s/
