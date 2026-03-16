@@ -18,9 +18,12 @@ import './App.css';
 
 // Assets
 import heroAbstract from './assets/hero_abstract.png';
-import iconPersonal from './assets/icon_personal.png';
-import iconBusiness from './assets/icon_business.png';
-import iconEnterprise from './assets/icon_enterprise.png';
+import iconAnalysis from './assets/icon_analysis.png';
+import iconAutomation from './assets/icon_automation.png';
+import iconSupport from './assets/icon_support.png';
+import iconFinance from './assets/icon_finance.png';
+import iconMarketing from './assets/icon_marketing.png';
+import iconSoftware from './assets/icon_software.png';
 
 // Chart.js registration
 ChartJS.register(
@@ -37,48 +40,41 @@ ChartJS.register(
 );
 
 const contentData = {
-  personal: {
-    title: "Personal Intelligence & Smart Life",
-    text: "<p>Odzyskaj 2 godziny każdego dnia. Tworzymy spersonalizowane skrypty i asystentów AI, którzy zarządzają Twoim kalendarzem, filtrują maile i automatyzują rutynowe zadania domowe oraz zawodowe. Twoje cyfrowe życie na autopilocie.</p>",
-    list: ["🚀 Spersonalizowani asystenci głosowi i tekstowi", "🚀 Automatyzacja skrzynki e-mail i kalendarza", "🚀 Integracje Smart Home (Home Assistant, IoT)"],
-    chartType: 'bar',
-    chartData: {
-      labels: ['Planowanie', 'E-maile', 'Research', 'Admin'],
-      datasets: [
-        { label: 'Czas manualny (min)', data: [60, 90, 45, 30], backgroundColor: 'rgba(59, 130, 246, 0.2)', borderColor: '#3b82f6', borderWidth: 1 },
-        { label: 'Z AI (min)', data: [5, 10, 5, 2], backgroundColor: '#3b82f6' }
-      ]
-    },
-    botMsg: "Chcesz odzyskać czas w życiu prywatnym czy w pracy biurowej?"
+  analysis: {
+    title: "Idea Analysis & Strategy",
+    text: "<p>Przekuwamy luźne wizje w techniczne blueprinty. Analizujemy rynek, konkurencję i wykonalność technologiczną. Twoja koncepcja, nasza precyzja.</p>",
+    list: ["🚀 Business Model Canvas AI", "🚀 Technical Feasibility Study", "🚀 MVP Roadmap Design"],
+    botMsg: "Witaj w dziale strategii. Przeanalizuję Twój pomysł pod kątem tech-stacku i skalowalności. Opowiedz mi o swojej wizji – co chcesz zbudować?"
   },
-  business: {
-    title: "Business OS & AI Agents",
-    text: "<p>Zbuduj autonomiczny oddział w swojej firmie. Wdrażamy agentów AI, którzy obsługują klientów, generują raporty i nadzorują logistykę 24/7. Wszystko to na bezpiecznych, lokalnych modelach LLM – Twoje dane nigdy nie opuszczają firmy.</p>",
-    list: ["🛡️ Prywatne instancje LLM (Llama 3, Mistral) na Twoich serwerach", "🛡️ Autonomiczni agenci sprzedażowi i wsparcia", "🛡️ Pełna automatyzacja dokumentów i CRM"],
-    chartData: {
-      labels: ['Zabezpieczone lokalnie', 'Szyfrowane', 'Publiczne (Brak)'],
-      datasets: [{ data: [80, 20, 0], backgroundColor: ['#3b82f6', '#8b5cf6', '#1e293b'], borderWidth: 0 }]
-    },
-    chartType: 'doughnut',
-    botMsg: "Bezpieczeństwo danych to priorytet. Interesuje Cię postawienie własnego ChatGPT na Twoim serwerze?"
+  automation: {
+    title: "Intelligent Automation",
+    text: "<p>Zbudujemy ekosystem, który pracuje za Ciebie. Od prostych skryptów po złożone workflowy AI integujące dziesiątki narzędzi.</p>",
+    list: ["🛡️ Custom AI Workflows", "🛡️ Browser Automation (Playwright)", "🛡️ Zapier/Make Advanced Integration"],
+    botMsg: "Automatyzacja to moja specjalność. Mogę wyręczyć Cię w powtarzalnych zadaniach. Jakie procesy w Twojej firmie zajmują zbyt dużo czasu?"
   },
-  enterprise: {
-    title: "Infrastructure & Open Source Systems",
-    text: "<p>Projektujemy i wdrażamy skalowalną architekturę dla największych wyzwań. Od customowych forków systemów open-source (jak ClawdBot), przez klastry GKE, aż po zaawansowane systemy tradingu algorytmicznego oparte o inżynierię poznawczą.</p>",
-    list: ["💎 Customowe systemy Open Source i architektura GKE", "💎 Algorytmiczne systemy tradingowe (Win Rate 67%+)", "💎 Rozwiązania klasy Enterprise dla dużych wolumenów danych"],
-    chartType: 'line',
-    chartData: {
-      labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-      datasets: [{
-        label: 'Wydajność systemów skalowalnych',
-        data: [100, 250, 600, 1200],
-        borderColor: '#8b5cf6',
-        backgroundColor: 'rgba(139, 92, 246, 0.1)',
-        fill: true,
-        tension: 0.4
-      }]
-    },
-    botMsg: "Budujemy coś od zera, czy potrzebujesz optymalizacji istniejącej architektury klasy Enterprise?"
+  support: {
+    title: "Technical Support",
+    text: "<p>Pomoc w nagłych wypadkach i stała opieka nad Twoją infrastrukturą. Rozwiązujemy problemy, których inni się boją.</p>",
+    list: ["💎 Emergency Debugging", "💎 Server Hardening & Security", "💎 Ongoing Tech Maintenance"],
+    botMsg: "Dział techniczny zgłasza gotowość. Naprawię błąd, zabezpieczę serwer lub pomogę w migracji. Co się zepsuło?"
+  },
+  finance: {
+    title: "Finance & Fintech AI",
+    text: "<p>Zaawansowane systemy finansowe. Od tradingu algorytmicznego po analizę portfela w czasie rzeczywistym z użyciem ML.</p>",
+    list: ["📈 Algorithmic Trading Systems", "📈 Financial Data Analytics", "📈 Blockchain & DeFi Integration"],
+    botMsg: "Witaj w module finansowym. Zajmuję się analizą danych rynkowych i budową systemów transakcyjnych. W jakim obszarze szukasz wsparcia?"
+  },
+  marketing: {
+    title: "Growth Marketing AI",
+    text: "<p>Skalowanie zasięgów dzięki precyzyjnym algorytmom. Marketing, który konwertuje, bo rozumie zachowania użytkowników.</p>",
+    list: ["🎯 AI-Driven Content Strategy", "🎯 Ad Campaign Optimization", "🎯 Automated Lead Generation"],
+    botMsg: "Marketing zasilany danymi to przyszłość. Pomogę Ci zoptymalizować kampanie i zautomatyzować generowanie leadów. Jaki jest Twój cel?"
+  },
+  software: {
+    title: "Software Engineering",
+    text: "<p>Full-stack development bez kompromisów. Od nowoczesnych web-appów po zaawansowane systemy backendowe klasy Enterprise.</p>",
+    list: ["💻 Next.js & React High-End UIs", "💻 Scalable Node.js Backends", "💻 Mobile Apps (React Native)"],
+    botMsg: "Jako Software Architect zbuduję dla Ciebie dowolny system. Od wydajnego API po oszałamiający frontend. Jaki projekt realizujemy?"
   }
 };
 
@@ -476,39 +472,50 @@ function App() {
         </div>
 
         <div className="bento-grid w-full mb-12">
-            <div onClick={() => handleCategorySelect('personal')} className="bento-item shimmer flex flex-col justify-between group">
-                <div>
-                  <img src={iconPersonal} alt="Personal AI" />
-                  <h3 className="text-2xl font-bold text-white mb-3">Personal Intelligence</h3>
-                  <p className="text-slate-400 text-sm font-light leading-relaxed">Inteligentni asystenci i automatyzacja codzienności.</p>
-                </div>
+            <div onClick={() => handleCategorySelect('analysis')} className="bento-item bento-analysis shimmer group">
+                <img src={iconAnalysis} alt="Idea Analysis" />
+                <h3 className="text-2xl font-bold text-white mb-2">Idea Analysis</h3>
+                <p className="text-slate-400 text-sm font-light">Blueprinty techniczne i weryfikacja wizji.</p>
             </div>
 
-            <div onClick={() => handleCategorySelect('business')} className="bento-item bento-large shimmer flex flex-col justify-between group">
-                <div className="relative z-10 h-full flex flex-col justify-between">
-                  <div>
-                    <img src={iconBusiness} alt="Business AI" className="w-32 h-32" />
-                    <h3 className="text-4xl font-extrabold text-white mb-4">Business OS & AI Agents</h3>
-                    <p className="text-slate-300 text-lg font-light leading-relaxed mb-6">Prywatne instancje LLM na Twoich serwerach. Pełna poufność danych.</p>
-                  </div>
-                  <ul className="text-accent-blue font-semibold space-y-2">
-                    <li>• Implementation of Local Llama/Mistral</li>
-                    <li>• Autonomous Sales & Support Agents</li>
-                    <li>• Full CRM & ERP AI Integration</li>
-                  </ul>
-                </div>
+            <div onClick={() => handleCategorySelect('automation')} className="bento-item bento-automation shimmer group">
+                <img src={iconAutomation} alt="Intelligent Automation" />
+                <h3 className="text-2xl font-bold text-white mb-2">Automation</h3>
+                <p className="text-slate-400 text-sm font-light">Autonomiczne procesy budujące Twój spokój.</p>
             </div>
 
-            <div onClick={() => handleCategorySelect('enterprise')} className="bento-item bento-wide shimmer flex flex-col justify-between group">
-                <div className="flex flex-col md:flex-row gap-8 items-center h-full">
+            <div onClick={() => handleCategorySelect('support')} className="bento-item bento-support shimmer group">
+                <img src={iconSupport} alt="Technical Support" />
+                <h3 className="text-2xl font-bold text-white mb-2">Tech Support</h3>
+                <p className="text-slate-400 text-sm font-light">Stała opieka i debugowanie krytyczne.</p>
+            </div>
+
+            <div onClick={() => handleCategorySelect('finance')} className="bento-item bento-finance shimmer group">
+                <img src={iconFinance} alt="Finance AI" />
+                <h3 className="text-3xl font-extrabold text-white mb-3">Finance & Strategy</h3>
+                <p className="text-slate-300 text-base font-light">Systemy tradingowe i analityka finansowa ML.</p>
+            </div>
+
+            <div onClick={() => handleCategorySelect('marketing')} className="bento-item bento-marketing shimmer group">
+                <img src={iconMarketing} alt="Growth Marketing" />
+                <h3 className="text-3xl font-extrabold text-white mb-3">Marketing Mastery</h3>
+                <p className="text-slate-300 text-base font-light">Skalowanie zasięgów oparte na czystych danych.</p>
+            </div>
+
+            <div onClick={() => handleCategorySelect('software')} className="bento-item bento-software shimmer group h-full">
+                <div className="flex flex-col md:flex-row gap-10 items-center">
                   <div className="flex-1">
-                    <img src={iconEnterprise} alt="Enterprise AI" />
-                    <h3 className="text-2xl font-bold text-white mb-2">Enterprise Infrastructure</h3>
-                    <p className="text-slate-400 text-sm font-light">Skalowalne systemy Open Source i trading algorytmiczny.</p>
+                    <img src={iconSoftware} alt="Software Engineering" className="w-24 h-24 mb-6" />
+                    <h3 className="text-4xl font-black text-white mb-4">Software Engineering</h3>
+                    <p className="text-slate-300 text-lg font-light leading-relaxed">Full-stack development: od Next.js po klastry backendowe. Budujemy systemy, które definiują rynek.</p>
                   </div>
-                  <div className="w-full md:w-48 h-full bg-blue-500/5 rounded-2xl border border-white/5 flex items-center justify-center relative overflow-hidden">
-                      <div className="absolute inset-0 animate-pulse-slow bg-gradient-to-r from-blue-500/10 to-purple-500/10"></div>
-                      <span className="text-white/40 font-bold text-[10px] tracking-widest uppercase rotate-90 whitespace-nowrap">SCALABLE ARCHITECTURE</span>
+                  <div className="hidden md:flex w-64 h-48 bg-emerald-500/5 rounded-3xl border border-white/5 items-center justify-center relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent"></div>
+                      <code className="text-emerald-400/50 text-[10px] leading-tight">
+                        const app = createSystem();<br/>
+                        env.deploy('production');<br/>
+                        status.ok();
+                      </code>
                   </div>
                 </div>
             </div>
