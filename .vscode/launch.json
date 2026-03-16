@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "chrome",
+            "name": "http://C:\\Users\\fesio\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Przeglądarka Opera Air",
+            "request": "launch",
+            "url": "http://C:\\Users\\fesio\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Przeglądarka Opera Air"
+        }
+    ]
+}
