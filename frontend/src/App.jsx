@@ -16,6 +16,12 @@ import {
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import './App.css';
 
+// Assets
+import heroAbstract from './assets/hero_abstract.png';
+import iconPersonal from './assets/icon_personal.png';
+import iconBusiness from './assets/icon_business.png';
+import iconEnterprise from './assets/icon_enterprise.png';
+
 // Chart.js registration
 ChartJS.register(
   CategoryScale,
@@ -351,11 +357,23 @@ function App() {
   const [openChat, setOpenChat] = useState({ open: false, msg: null });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   
   // Stany dla formularza web3forms
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
   const detailsRef = useRef(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePos({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   useEffect(() => {
     // Inicjalizacja Lenis (Smooth Scroll)
@@ -439,44 +457,58 @@ function App() {
 
       <main className="flex-1 w-full max-w-6xl mx-auto p-6 flex flex-col items-center">
         
-        <div className="text-center max-w-3xl mx-auto my-20">
-            <h2 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-none text-gradient px-4">Przekraczamy granice <br/><span className="text-accent-gradient">możliwości.</span></h2>
-            <p className="text-xl text-slate-400 font-light">Od drobnych automatyzacji po skalowalne systemy Enterprise. <br/>Twoja innowacja napędzana naszą inżynierią.</p>
+        <div className="hero-container">
+            <div className="hero-visual" style={{ transform: `translate(calc(-50% + ${mousePos.x}px), calc(-50% + ${mousePos.y}px))` }}>
+                <img src={heroAbstract} alt="AI Neural Core" />
+            </div>
+            <h2 className="text-6xl md:text-8xl font-extrabold text-white mb-8 tracking-tighter leading-none text-gradient px-4">
+              Przekraczamy granice <br/>
+              <span className="text-accent-gradient">możliwości.</span>
+            </h2>
+            <p className="text-2xl text-slate-400 font-light max-w-2xl mx-auto">
+              Od spersonalizowanych asystentów po systemy klasy Enterprise. <br/>
+              Twoja wizja zasilana naszą inżynierią.
+            </p>
+            <div className="mt-12 flex gap-4">
+                <button onClick={() => detailsRef.current?.scrollIntoView({ behavior: 'smooth' })} className="bg-white text-black font-bold py-4 px-10 rounded-2xl hover:scale-105 transition-transform">Poznaj Ecosystem</button>
+                <button onClick={() => setIsOpen(true)} className="border border-white/20 backdrop-blur-md text-white font-bold py-4 px-10 rounded-2xl hover:bg-white/5 transition-all">Porozmawiaj z AI</button>
+            </div>
         </div>
 
         <div className="bento-grid w-full mb-12">
-            <div onClick={() => handleCategorySelect('personal')} className="bento-item flex flex-col justify-between group">
+            <div onClick={() => handleCategorySelect('personal')} className="bento-item shimmer flex flex-col justify-between group">
                 <div>
-                  <span className="text-5xl mb-6 block group-hover:scale-110 transition-transform">🚀</span>
+                  <img src={iconPersonal} alt="Personal AI" />
                   <h3 className="text-2xl font-bold text-white mb-3">Personal Intelligence</h3>
-                  <p className="text-slate-400 text-sm font-light leading-relaxed">Inteligentni asystenci, skrypty i automatyzacja codzienności. Odzyskaj swój czas.</p>
+                  <p className="text-slate-400 text-sm font-light leading-relaxed">Inteligentni asystenci i automatyzacja codzienności.</p>
                 </div>
             </div>
 
-            <div onClick={() => handleCategorySelect('business')} className="bento-item bento-large flex flex-col justify-between group">
-                <div className="relative z-10">
-                  <span className="text-7xl mb-6 block group-hover:scale-110 transition-transform">🛡️</span>
-                  <h3 className="text-4xl font-extrabold text-white mb-4">Business OS & AI Agents</h3>
-                  <p className="text-slate-300 text-lg font-light leading-relaxed mb-6">Wdrażamy agentów AI na Twoich własnych, lokalnych serwerach. Pełna prywatność, zero ryzyka, maksymalna wydajność.</p>
+            <div onClick={() => handleCategorySelect('business')} className="bento-item bento-large shimmer flex flex-col justify-between group">
+                <div className="relative z-10 h-full flex flex-col justify-between">
+                  <div>
+                    <img src={iconBusiness} alt="Business AI" className="w-32 h-32" />
+                    <h3 className="text-4xl font-extrabold text-white mb-4">Business OS & AI Agents</h3>
+                    <p className="text-slate-300 text-lg font-light leading-relaxed mb-6">Prywatne instancje LLM na Twoich serwerach. Pełna poufność danych.</p>
+                  </div>
                   <ul className="text-accent-blue font-semibold space-y-2">
-                    <li>• Local LLM Implementation</li>
-                    <li>• Autonomous Sales Agents</li>
-                    <li>• Cognitive Logistics</li>
+                    <li>• Implementation of Local Llama/Mistral</li>
+                    <li>• Autonomous Sales & Support Agents</li>
+                    <li>• Full CRM & ERP AI Integration</li>
                   </ul>
                 </div>
-                <div className="absolute bottom-4 right-4 text-white/5 font-black text-8xl uppercase pointer-events-none">Shield</div>
             </div>
 
-            <div onClick={() => handleCategorySelect('enterprise')} className="bento-item bento-wide flex flex-col justify-between group">
-                <div className="flex flex-col md:flex-row gap-8 items-center">
+            <div onClick={() => handleCategorySelect('enterprise')} className="bento-item bento-wide shimmer flex flex-col justify-between group">
+                <div className="flex flex-col md:flex-row gap-8 items-center h-full">
                   <div className="flex-1">
-                    <span className="text-5xl mb-4 block group-hover:scale-110 transition-transform">💎</span>
-                    <h3 className="text-2xl font-bold text-white mb-2">Enterprise & Open Source</h3>
-                    <p className="text-slate-400 text-sm font-light">Skalowalne systemy, forki Open Source (ClawdBot) i trading klasy instytucjonalnej.</p>
+                    <img src={iconEnterprise} alt="Enterprise AI" />
+                    <h3 className="text-2xl font-bold text-white mb-2">Enterprise Infrastructure</h3>
+                    <p className="text-slate-400 text-sm font-light">Skalowalne systemy Open Source i trading algorytmiczny.</p>
                   </div>
-                  <div className="w-full md:w-48 h-24 bg-blue-500/10 rounded-xl border border-blue-500/20 flex items-center justify-center relative overflow-hidden">
-                      <div className="absolute inset-0 animate-pulse-slow bg-gradient-to-r from-blue-500/20 to-purple-500/20"></div>
-                      <span className="text-blue-400 font-bold text-xs tracking-tighter uppercase">Infrastructure Live</span>
+                  <div className="w-full md:w-48 h-full bg-blue-500/5 rounded-2xl border border-white/5 flex items-center justify-center relative overflow-hidden">
+                      <div className="absolute inset-0 animate-pulse-slow bg-gradient-to-r from-blue-500/10 to-purple-500/10"></div>
+                      <span className="text-white/40 font-bold text-[10px] tracking-widest uppercase rotate-90 whitespace-nowrap">SCALABLE ARCHITECTURE</span>
                   </div>
                 </div>
             </div>
