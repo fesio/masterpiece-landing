@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antigravity Builder | AI Automations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0d1117;
+      --bg-card: rgba(22, 27, 34, 0.7);
+      --border-card: rgba(48, 54, 61, 0.8);
+      --neon-green: #2ea043;
+      --neon-blue: #58a6ff;
+      --text-main: #c9d1d9;
+      --text-muted: #8b949e;
+      --font-mono: 'Fira Code', 'Courier New', Courier, monospace;
+      --font-sans: 'Inter', system-ui, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+    }
+
+    /* Background noise/grain */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .section-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    /* Typography */
+    h1, h2, h3 { font-family: var(--font-mono); font-weight: 600; }
+    .mono { font-family: var(--font-mono); }
+    
+    .text-green { color: var(--neon-green); text-shadow: 0 0 10px rgba(46, 160, 67, 0.4); }
+    .text-blue { color: var(--neon-blue); text-shadow: 0 0 10px rgba(88, 166, 255, 0.4); }
+
+    /* IDE / Terminal Window */
+    .terminal-window {
+      background: #010409;
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 800px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+    }
+    
+    .terminal-header {
+      background: #161b22;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border-card);
+    }
+    
+    .terminal-dots { display: flex; gap: 8px; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+    
+    .terminal-title {
+      margin-left: auto; margin-right: auto;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .terminal-body {
+      padding: 40px;
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      min-height: 200px;
+    }
+
+    /* Typewriter cursor */
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2em;
+      background-color: var(--neon-green);
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* Primary Button */
+    .btn-primary {
+      display: inline-block;
+      margin-top: 30px;
+      background: transparent;
+      color: var(--neon-green);
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      padding: 16px 40px;
+      border: 1px solid var(--neon-green);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary:hover {
+      background: var(--neon-green);
+      color: var(--bg-dark);
+      box-shadow: 0 0 20px rgba(46, 160, 67, 0.6);
+      transform: translateY(-2px);
+    }
+
+    /* Step Typography */
+    .step-title {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      color: white;
+    }
+
+    /* Cards Grid (Fitts's Law) */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      padding: 40px 30px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Glassmorphism Hover */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 50%; height: 100%;
+      background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+      transform: skewX(-25deg);
+      transition: 0.5s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border-color: var(--neon-blue);
+      box-shadow: 0 10px 30px rgba(88, 166, 255, 0.15);
+      background: rgba(30, 36, 45, 0.8);
+    }
+    
+    .card:hover::before { left: 200%; }
+    
+    .card.selected {
+      border-color: var(--neon-green);
+      box-shadow: 0 0 30px rgba(46, 160, 67, 0.6), inset 0 0 15px rgba(46, 160, 67, 0.2);
+      transform: scale(0.98);
+      background: rgba(46, 160, 67, 0.1);
+    }
+
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--text-muted);
+      transition: color 0.3s;
+    }
+    .card:hover .card-icon { color: var(--neon-blue); }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* Forms & Inputs */
+    .input-group {
+      width: 100%;
+      max-width: 600px;
+      margin-top: 30px;
+      position: relative;
+    }
+
+    .terminal-input {
+      width: 100%;
+      background: #010409;
+      border: 1px solid var(--border-card);
+      color: var(--neon-green);
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      padding: 20px 24px;
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.3s;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .terminal-input::placeholder { color: rgba(139, 148, 158, 0.5); }
+    .terminal-input:focus {
+      border-color: var(--neon-green);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), 0 0 15px rgba(46, 160, 67, 0.3);
+    }
+
+    .btn-submit {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      background: var(--neon-green);
+      color: var(--bg-dark);
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .btn-submit.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .btn-submit.active:hover {
+      box-shadow: 0 0 25px rgba(46, 160, 67, 0.6);
+      transform: translateY(-2px);
+    }
+
+    /* JSON Display */
+    .json-display {
+      background: #010409;
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 24px;
+      width: 100%;
+      max-width: 600px;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      white-space: pre-wrap;
+      color: #8b949e;
+      text-align: left;
+    }
+    
+    .json-key { color: #79c0ff; }
+    .json-string { color: #a5d6ff; }
+    .json-bracket { color: #d2a8ff; }
+
+    /* Hide sections initially */
+    .fade-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .fade-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .footer-note {
+      position: absolute;
+      bottom: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    @media (max-width: 768px) {
+      .step-title { font-size: 1.8rem; }
+      .terminal-body { padding: 20px; font-size: 0.95rem; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .card { min-height: 80px; padding: 20px; }
+      .btn-primary, .btn-submit, .terminal-input { min-height: 48px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ETAP 0 -->
+  <section id="step-0" class="section-container">
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="terminal-dots">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+        </div>
+        <div class="terminal-title">~/antigravity/init_sequence.sh</div>
+      </div>
+      <div class="terminal-body">
+        <span class="text-blue">></span> <span id="typewriter-text"></span><span class="cursor"></span>
+        <br><br>
+        <div id="hero-content" style="opacity: 0; display: none;">
+          <h1 style="font-size: 2.5rem; margin-bottom: 20px; color: white;">AI zmienia zasady gry.</h1>
+          <p style="color: var(--text-muted); margin-bottom: 30px;">Zbuduj przewagę technologiczną dzięki autonomicznym systemom i zaawansowanej architekturze B2B.</p>
+          <button class="btn-primary" onclick="goToStep(1)">> Zainicjuj audyt</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAP 1 -->
+  <section id="step-1" class="section-container fade-section">
+    <h2 class="step-title">Jaki jest <span class="text-blue">główny cel</span> zlecenia?</h2>
+    <div class="cards-grid">
+      <div class="card" onclick="selectOption('goal', 'Podniesienie produktywności', 1)">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">Podniesienie produktywności</div>
+      </div>
+      <div class="card" onclick="selectOption('goal', 'Integracja systemów', 1)">
+        <div class="card-icon">🧩</div>
+        <div class="card-title">Integracja systemów</div>
+      </div>
+      <div class="card" onclick="selectOption('goal', 'Projektowanie agentów', 1)">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">Projektowanie agentów</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAP 2 -->
+  <section id="step-2" class="section-container fade-section">
+    <h2 class="step-title">Co dokładnie chcesz <span class="text-green">zautomatyzować</span>?</h2>
+    <div class="cards-grid">
+      <div class="card" onclick="selectOption('area', 'Obsługa klienta', 2)">
+        <div class="card-icon">💬</div>
+        <div class="card-title">Obsługa klienta</div>
+      </div>
+      <div class="card" onclick="selectOption('area', 'Analiza danych', 2)">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Analiza danych</div>
+      </div>
+      <div class="card" onclick="selectOption('area', 'Back-office', 2)">
+        <div class="card-icon">⚙️</div>
+        <div class="card-title">Back-office</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAP 3 -->
+  <section id="step-3" class="section-container fade-section">
+    <h2 class="step-title mono">Podsumowanie architektury.</h2>
+    
+    <div class="json-display" id="json-output">
+<span class="json-bracket">{</span>
+  <span class="json-key">"zlecenie"</span>: <span class="json-bracket">{</span>
+    <span class="json-key">"cel"</span>: <span class="json-string" id="json-goal">"null"</span>,
+    <span class="json-key">"obszar"</span>: <span class="json-string" id="json-area">"null"</span>,
+    <span class="json-key">"status"</span>: <span class="text-green">"READY_FOR_DEPLOYMENT"</span>
+  <span class="json-bracket">}</span>
+<span class="json-bracket">}</span></div>
+
+    <form id="audit-form" class="input-group" onsubmit="submitForm(event)">
+      <input type="hidden" name="access_key" value="dccd5b2d-0139-4d07-8ce6-3b567caf5fde">
+      <input type="hidden" name="subject" value="Nowe Zapytanie B2B - Audyt">
+      <input type="hidden" name="goal" id="form-goal" value="">
+      <input type="hidden" name="area" id="form-area" value="">
+      <div style="position: relative; width: 100%;">
+        <input 
+          type="email" 
+          name="email"
+          id="email-input" 
+          class="terminal-input" 
+          placeholder="> Podaj e-mail kontaktowy..."
+          oninput="validateEmail()"
+          required
+        >
+        <div id="email-error" style="opacity: 0; color: #ffbd2e; font-family: var(--font-mono); font-size: 0.85rem; position: absolute; top: calc(100% + 8px); left: 0; transition: opacity 0.3s ease-in-out; pointer-events: none;">> [Ostrzeżenie]: Sprawdź format adresu (np. nazwa@domena.com)</div>
+      </div>
+      <button type="submit" id="submit-btn" class="btn-submit" style="margin-top: 36px;">Zatwierdź i Przekaż Zlecenie</button>
+    </form>
+    
+    <div class="footer-note">System szyfrowany End-to-End.</div>
+  </section>
+
+  <script>
+    // --- STATE MANAGEMENT ---
+    const orderState = {
+      goal: null,
+      area: null
+    };
+
+    // --- TYPEWRITER EFFECT (Hero) ---
+    const texts = [
+      "Ładowanie modułów kognitywnych...",
+      "Inicjalizacja sieci neuronowej...",
+      "System gotowy. Oczekiwanie na instrukcje."
+    ];
+    let textIndex = 0;
+    let charIndex = 0;
+    const speed = 40;
+    const typeWriterEl = document.getElementById('typewriter-text');
+    const heroContent = document.getElementById('hero-content');
+
+    function typeWriter() {
+      if (textIndex < texts.length) {
+        if (charIndex < texts[textIndex].length) {
+          typeWriterEl.innerHTML += texts[textIndex].charAt(charIndex);
+          charIndex++;
+          setTimeout(typeWriter, speed);
+        } else {
+          // Finished one line
+          textIndex++;
+          charIndex = 0;
+          if(textIndex < texts.length) {
+            typeWriterEl.innerHTML += '<br><span class="text-blue">></span> ';
+            setTimeout(typeWriter, 500); // pause between lines
+          } else {
+            // Finished all lines
+            setTimeout(() => {
+              heroContent.style.display = 'block';
+              heroContent.style.transition = 'opacity 1s ease-in';
+              // Trigger reflow
+              void heroContent.offsetWidth;
+              heroContent.style.opacity = '1';
+            }, 500);
+          }
+        }
+      }
+    }
+
+    // Start typewriter
+    window.onload = () => {
+      setTimeout(typeWriter, 1000);
+    };
+
+    // --- NAVIGATION LOGIC ---
+    function goToStep(stepNumber) {
+      const targetStep = document.getElementById(`step-${stepNumber}`);
+      targetStep.classList.add('visible');
+      targetStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function selectOption(key, value, currentStep) {
+      orderState[key] = value;
+      
+      // Visual feedback on cards
+      const stepSection = document.getElementById(`step-${currentStep}`);
+      const cards = stepSection.querySelectorAll('.card');
+      cards.forEach(c => c.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+
+      // Update JSON & Form hidden fields
+      document.getElementById(`json-${key}`).innerText = `"${value}"`;
+      document.getElementById(`form-${key}`).value = value;
+
+      // Auto-advance
+      setTimeout(() => {
+        goToStep(currentStep + 1);
+      }, 400); // slight delay for visual feedback
+    }
+
+    // --- VALIDATION ---
+    function validateEmail() {
+      const emailInput = document.getElementById('email-input').value;
+      const btn = document.getElementById('submit-btn');
+      const errorMsg = document.getElementById('email-error');
+      
+      const isValid = emailInput.includes('@') && emailInput.includes('.');
+      
+      if (isValid || emailInput.length === 0) {
+        errorMsg.style.opacity = '0';
+      } else {
+        errorMsg.style.opacity = '1';
+      }
+
+      if (isValid) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    }
+
+    // --- FORM SUBMISSION ---
+    function submitForm(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      
+      btn.innerText = "Przetwarzanie...";
+      btn.classList.remove('active');
+      
+      // Minimal fetch to Web3Forms API
+      const formData = new FormData(e.target);
+      fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          btn.innerText = "ZLECENIE PRZYJĘTE - DZIĘKUJEMY";
+          btn.style.background = "#2ea043";
+          document.getElementById('email-input').value = '';
+      })
+      .catch(error => {
+          btn.innerText = "BŁĄD SIECI - SPRÓBUJ PONOWNIE";
+          btn.style.background = "#ff5f56";
+          setTimeout(() => {
+             btn.innerText = "Zatwierdź i Przekaż Zlecenie";
+             validateEmail();
+          }, 3000);
+      });
+    }
+    
+    // Smooth reveal on natural scroll just in case
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-section').forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+</body>
+</html>
