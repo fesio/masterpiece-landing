@@ -31,48 +31,48 @@ ChartJS.register(
 );
 
 const contentData = {
-  automation: {
-    title: "Automatyzacja procesów & Agenci AI",
-    text: "<p>Zastąp powtarzalną pracę inteligentnymi skryptami. Łączymy systemy, aby działały jako jedna, spójna maszyna. Od automatyzacji odpisywania na maile, po zaawansowanych agentów AI obsługujących logistykę i smart home.</p>",
-    list: ["✅ Inteligentni Agenci AI pracujący 24/7", "✅ Integracje API (Zapie, Make, systemy dedykowane)", "✅ Automatyzacja urządzeń Smart Home i IoT"],
+  personal: {
+    title: "Personal Intelligence & Smart Life",
+    text: "<p>Odzyskaj 2 godziny każdego dnia. Tworzymy spersonalizowane skrypty i asystentów AI, którzy zarządzają Twoim kalendarzem, filtrują maile i automatyzują rutynowe zadania domowe oraz zawodowe. Twoje cyfrowe życie na autopilocie.</p>",
+    list: ["🚀 Spersonalizowani asystenci głosowi i tekstowi", "🚀 Automatyzacja skrzynki e-mail i kalendarza", "🚀 Integracje Smart Home (Home Assistant, IoT)"],
     chartType: 'bar',
     chartData: {
-      labels: ['Obsługa Klienta', 'Wprowadzanie Danych', 'Raportowanie', 'Logistyka'],
+      labels: ['Planowanie', 'E-maile', 'Research', 'Admin'],
       datasets: [
-        { label: 'Godziny pracy (Przed AI)', data: [40, 25, 15, 30], backgroundColor: '#cbd5e1' },
-        { label: 'Godziny pracy (Po AI)', data: [5, 2, 1, 10], backgroundColor: '#3b82f6' }
+        { label: 'Czas manualny (min)', data: [60, 90, 45, 30], backgroundColor: 'rgba(59, 130, 246, 0.2)', borderColor: '#3b82f6', borderWidth: 1 },
+        { label: 'Z AI (min)', data: [5, 10, 5, 2], backgroundColor: '#3b82f6' }
       ]
     },
-    botMsg: "Świetny wybór! Automatyzacja to moja pasja. Jaka powtarzalna czynność zajmuje Ci najwięcej czasu?"
+    botMsg: "Chcesz odzyskać czas w życiu prywatnym czy w pracy biurowej?"
   },
-  security: {
-    title: "Bezpieczeństwo & Wewnętrzne Modele LLM",
-    text: "<p>Wdrażaj sztuczną inteligencję bez obaw o wyciek danych. Konfigurujemy lokalne modele językowe (podobnie jak ChatGPT), do których dostęp masz wyłącznie Ty i Twoi pracownicy. Twoje dane biznesowe nigdy nie opuszczają firmy.</p>",
-    list: ["✅ Wdrożenia lokalnych modeli (Llama, Mistral) na Twoich serwerach", "✅ Zabezpieczenia systemów i audyty kodu", "✅ Systemy RAG bazujące wyłącznie na Twojej dokumentacji"],
-    chartType: 'doughnut',
+  business: {
+    title: "Business OS & AI Agents",
+    text: "<p>Zbuduj autonomiczny oddział w swojej firmie. Wdrażamy agentów AI, którzy obsługują klientów, generują raporty i nadzorują logistykę 24/7. Wszystko to na bezpiecznych, lokalnych modelach LLM – Twoje dane nigdy nie opuszczają firmy.</p>",
+    list: ["🛡️ Prywatne instancje LLM (Llama 3, Mistral) na Twoich serwerach", "🛡️ Autonomiczni agenci sprzedażowi i wsparcia", "🛡️ Pełna automatyzacja dokumentów i CRM"],
     chartData: {
-      labels: ['Zabezpieczone lokalnie', 'Szyfrowane w chmurze', 'Podatności usunięte'],
-      datasets: [{ data: [65, 25, 10], backgroundColor: ['#3b82f6', '#94a3b8', '#10b981'], borderWidth: 0 }]
+      labels: ['Zabezpieczone lokalnie', 'Szyfrowane', 'Publiczne (Brak)'],
+      datasets: [{ data: [80, 20, 0], backgroundColor: ['#3b82f6', '#8b5cf6', '#1e293b'], borderWidth: 0 }]
     },
-    botMsg: "Bezpieczeństwo to podstawa. Chcesz porozmawiać o własnym, odizolowanego modelu AI na Twoim serwerze?"
+    chartType: 'doughnut',
+    botMsg: "Bezpieczeństwo danych to priorytet. Interesuje Cię postawienie własnego ChatGPT na Twoim serwerze?"
   },
-  finance: {
-    title: "Inżynieria Finansowa & Trading Boty",
-    text: "<p>Odzyskaj kontrolę nad budżetem i pomnażaj kapitał. Oferujemy budowę wirtualnych asystentów księgowych optymalizujących wydatki oraz zaawansowane skrypty do tradingu (TradingView/Pine Script) analizujące rynek kryptowalut i akcji.</p>",
-    list: ["✅ Strategie Pine Script (backtesty z 67%+ Win Rate)", "✅ Skanery rynkowe i boty do automatycznego handlu", "✅ AI analizujące Twoje faktury i tnące zbędne koszty"],
+  enterprise: {
+    title: "Infrastructure & Open Source Systems",
+    text: "<p>Projektujemy i wdrażamy skalowalną architekturę dla największych wyzwań. Od customowych forków systemów open-source (jak ClawdBot), przez klastry GKE, aż po zaawansowane systemy tradingu algorytmicznego oparte o inżynierię poznawczą.</p>",
+    list: ["💎 Customowe systemy Open Source i architektura GKE", "💎 Algorytmiczne systemy tradingowe (Win Rate 67%+)", "💎 Rozwiązania klasy Enterprise dla dużych wolumenów danych"],
     chartType: 'line',
     chartData: {
-      labels: ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10'],
+      labels: ['Q1', 'Q2', 'Q3', 'Q4'],
       datasets: [{
-        label: 'Wzrost kapitału (Strategia 67% WR)',
-        data: [1000, 1050, 1120, 1080, 1250, 1400, 1350, 1600, 1850, 2100],
-        borderColor: '#10b981',
-        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+        label: 'Wydajność systemów skalowalnych',
+        data: [100, 250, 600, 1200],
+        borderColor: '#8b5cf6',
+        backgroundColor: 'rgba(139, 92, 246, 0.1)',
         fill: true,
         tension: 0.4
       }]
     },
-    botMsg: "Finanse! Interesuje Cię redukcja wydatków, czy budowa skryptów tradingowych na TradingView?"
+    botMsg: "Budujemy coś od zera, czy potrzebujesz optymalizacji istniejącej architektury klasy Enterprise?"
   }
 };
 
@@ -421,74 +421,96 @@ function App() {
   const currentData = selectedCategory ? contentData[selectedCategory] : null;
 
   return (
-    <div className="text-slate-800 min-h-screen flex flex-col font-sans bg-slate-50 overflow-hidden">
+    <div className="text-white min-h-screen flex flex-col font-sans bg-[#020617] overflow-x-hidden">
       
       <WarpSpeedPreloader isVisible={showSplash} />
       
       <div className={`transition-opacity duration-1000 ${showSplash ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100'}`}>
-      <header className="bg-white border-b border-slate-200 p-6 shadow-sm">
+      <header className="bg-transparent border-b border-white/5 p-6 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-slate-800 tracking-tight">TechPartner<span className="text-blue-600">.AI</span></h1>
-            <nav className="hidden md:flex gap-6 font-medium text-slate-600">
-                <span className="hover:text-blue-600 cursor-pointer">Usługi</span>
-                <span className="hover:text-blue-600 cursor-pointer">O nas</span>
-                <span className="hover:text-blue-600 cursor-pointer">Kontakt</span>
+            <h1 className="text-2xl font-extrabold text-white tracking-tighter">TECH<span className="text-accent-blue">PARTNER</span></h1>
+            <nav className="hidden md:flex gap-8 font-semibold text-white/60">
+                <span className="hover:text-white transition-colors cursor-pointer text-sm tracking-widest uppercase">Ecosystem</span>
+                <span className="hover:text-white transition-colors cursor-pointer text-sm tracking-widest uppercase">OS Projects</span>
+                <span className="hover:text-white transition-colors cursor-pointer text-sm tracking-widest uppercase">Contact</span>
             </nav>
         </div>
       </header>
 
       <main className="flex-1 w-full max-w-6xl mx-auto p-6 flex flex-col items-center">
         
-        <div className="text-center max-w-2xl mx-auto my-12">
-            <h2 className="text-4xl font-extrabold text-slate-900 mb-4">W czym mogę Ci dziś pomóc?</h2>
-            <p className="text-lg text-slate-600">Wybierz obszar, który chcesz zoptymalizować, a my dostarczymy gotowe rozwiązanie. Bez stresu, bez żargonu.</p>
+        <div className="text-center max-w-3xl mx-auto my-20">
+            <h2 className="text-5xl md:text-7xl font-extrabold text-white mb-6 tracking-tight leading-none text-gradient px-4">Przekraczamy granice <br/><span className="text-accent-gradient">możliwości.</span></h2>
+            <p className="text-xl text-slate-400 font-light">Od drobnych automatyzacji po skalowalne systemy Enterprise. <br/>Twoja innowacja napędzana naszą inżynierią.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mb-12">
-            <button onClick={() => handleCategorySelect('automation')} className="tile-hover outline-none bg-white p-8 rounded-2xl border border-slate-200 flex flex-col items-center text-center cursor-pointer group focus:ring-4 focus:ring-blue-100">
-                <span className="text-6xl mb-4 group-hover:scale-110 transition-transform">🚀</span>
-                <h3 className="text-xl font-bold text-slate-800 mb-2">Automatyzacja & AI</h3>
-                <p className="text-sm text-slate-500">Uwolnij swój czas. Smart boty, agenci AI, automatyzacja procesów.</p>
-            </button>
+        <div className="bento-grid w-full mb-12">
+            <div onClick={() => handleCategorySelect('personal')} className="bento-item flex flex-col justify-between group">
+                <div>
+                  <span className="text-5xl mb-6 block group-hover:scale-110 transition-transform">🚀</span>
+                  <h3 className="text-2xl font-bold text-white mb-3">Personal Intelligence</h3>
+                  <p className="text-slate-400 text-sm font-light leading-relaxed">Inteligentni asystenci, skrypty i automatyzacja codzienności. Odzyskaj swój czas.</p>
+                </div>
+            </div>
 
-            <button onClick={() => handleCategorySelect('security')} className="tile-hover outline-none bg-white p-8 rounded-2xl border border-slate-200 flex flex-col items-center text-center cursor-pointer group focus:ring-4 focus:ring-blue-100">
-                <span className="text-6xl mb-4 group-hover:scale-110 transition-transform">🛡️</span>
-                <h3 className="text-xl font-bold text-slate-800 mb-2">Bezpieczne Dane</h3>
-                <p className="text-sm text-slate-500">Prywatne modele LLM (Twój własny ChatGPT), pełna ochrona danych.</p>
-            </button>
+            <div onClick={() => handleCategorySelect('business')} className="bento-item bento-large flex flex-col justify-between group">
+                <div className="relative z-10">
+                  <span className="text-7xl mb-6 block group-hover:scale-110 transition-transform">🛡️</span>
+                  <h3 className="text-4xl font-extrabold text-white mb-4">Business OS & AI Agents</h3>
+                  <p className="text-slate-300 text-lg font-light leading-relaxed mb-6">Wdrażamy agentów AI na Twoich własnych, lokalnych serwerach. Pełna prywatność, zero ryzyka, maksymalna wydajność.</p>
+                  <ul className="text-accent-blue font-semibold space-y-2">
+                    <li>• Local LLM Implementation</li>
+                    <li>• Autonomous Sales Agents</li>
+                    <li>• Cognitive Logistics</li>
+                  </ul>
+                </div>
+                <div className="absolute bottom-4 right-4 text-white/5 font-black text-8xl uppercase pointer-events-none">Shield</div>
+            </div>
 
-            <button onClick={() => handleCategorySelect('finance')} className="tile-hover outline-none bg-white p-8 rounded-2xl border border-slate-200 flex flex-col items-center text-center cursor-pointer group focus:ring-4 focus:ring-blue-100">
-                <span className="text-6xl mb-4 group-hover:scale-110 transition-transform">💎</span>
-                <h3 className="text-xl font-bold text-slate-800 mb-2">Finanse & Strategie</h3>
-                <p className="text-sm text-slate-500">Kontrola kosztów i zyskowne strategie Pine Script.</p>
-            </button>
+            <div onClick={() => handleCategorySelect('enterprise')} className="bento-item bento-wide flex flex-col justify-between group">
+                <div className="flex flex-col md:flex-row gap-8 items-center">
+                  <div className="flex-1">
+                    <span className="text-5xl mb-4 block group-hover:scale-110 transition-transform">💎</span>
+                    <h3 className="text-2xl font-bold text-white mb-2">Enterprise & Open Source</h3>
+                    <p className="text-slate-400 text-sm font-light">Skalowalne systemy, forki Open Source (ClawdBot) i trading klasy instytucjonalnej.</p>
+                  </div>
+                  <div className="w-full md:w-48 h-24 bg-blue-500/10 rounded-xl border border-blue-500/20 flex items-center justify-center relative overflow-hidden">
+                      <div className="absolute inset-0 animate-pulse-slow bg-gradient-to-r from-blue-500/20 to-purple-500/20"></div>
+                      <span className="text-blue-400 font-bold text-xs tracking-tighter uppercase">Infrastructure Live</span>
+                  </div>
+                </div>
+            </div>
         </div>
 
         {selectedCategory && currentData && (
-          <div ref={detailsRef} className="w-full bg-white rounded-2xl border border-slate-200 p-8 shadow-sm transition-all duration-500 mb-12 animate-in fade-in slide-in-from-bottom-4">
-              <div className="flex flex-col lg:flex-row gap-8 items-start">
+          <div ref={detailsRef} className="w-full bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-10 shadow-2xl mb-12 animate-in fade-in slide-in-from-bottom-8">
+              <div className="flex flex-col lg:flex-row gap-12 items-start">
                   <div className="flex-1 w-full">
-                      <h3 className="text-3xl font-bold text-slate-900 mb-4">{currentData.title}</h3>
-                      <div className="prose prose-slate max-w-none mb-6" dangerouslySetInnerHTML={{ __html: currentData.text }}></div>
-                      <ul className="space-y-3 text-slate-700 font-medium mb-8">
+                      <span className="text-accent-blue font-bold uppercase tracking-widest text-xs mb-2 block">Solution Insight</span>
+                      <h3 className="text-4xl font-extrabold text-white mb-6 leading-tight">{currentData.title}</h3>
+                      <div className="prose prose-invert max-w-none mb-8 text-slate-300 leading-relaxed text-lg" dangerouslySetInnerHTML={{ __html: currentData.text }}></div>
+                      <ul className="space-y-4 text-white/80 font-medium mb-10">
                         {currentData.list.map((item, idx) => (
-                          <li key={idx}>{item}</li>
+                          <li key={idx} className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 bg-accent-blue rounded-full"></span>
+                            {item}
+                          </li>
                         ))}
                       </ul>
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-colors w-full md:w-auto">
-                          Rozpocznij wdrażanie
+                      <button className="bg-gradient-to-r from-accent-blue to-accent-purple hover:scale-105 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] text-white font-bold py-4 px-10 rounded-2xl transition-all w-full md:w-auto">
+                          Wybierz to rozwiązanie
                       </button>
                   </div>
-                  <div className="flex-1 w-full flex justify-center items-center bg-slate-50 rounded-xl p-4 border border-slate-100">
-                      <div className="relative w-full max-w-[800px] mx-auto h-[350px] max-h-[400px]">
+                  <div className="flex-1 w-full flex justify-center items-center bg-black/20 rounded-3xl p-8 border border-white/5">
+                      <div className="relative w-full h-[400px]">
                         {currentData.chartType === 'bar' && (
-                          <Bar data={currentData.chartData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, animation: { duration: 1000, easing: 'easeOutQuart' } }} />
+                          <Bar data={currentData.chartData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { ticks: { color: '#64748b' }, grid: { display: false } } } }} />
                         )}
                         {currentData.chartType === 'doughnut' && (
-                          <Doughnut data={currentData.chartData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, animation: { duration: 1000, easing: 'easeOutQuart' } }} />
+                          <Doughnut data={currentData.chartData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Outfit', size: 12 } } } } }} />
                         )}
                         {currentData.chartType === 'line' && (
-                          <Line data={currentData.chartData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, animation: { duration: 1000, easing: 'easeOutQuart' } }} />
+                          <Line data={currentData.chartData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { ticks: { color: '#64748b' }, grid: { display: false } } } }} />
                         )}
                       </div>
                   </div>
@@ -496,25 +518,25 @@ function App() {
           </div>
         )}
 
-        <section className="w-full bg-white rounded-2xl border border-slate-200 p-8 shadow-sm mb-12">
-            <h2 className="text-3xl font-bold text-slate-900 mb-6 text-center">Formularz kontaktowy</h2>
-            <form onSubmit={handleSubmit} className="max-w-xl mx-auto flex flex-col gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-bold text-slate-700">Imię</label>
+        <section className="w-full bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-12 shadow-2xl mb-12">
+            <h2 className="text-4xl font-extrabold text-white mb-8 text-center tracking-tight">Gotowy na <span className="text-accent-blue">skalowanie?</span></h2>
+            <form onSubmit={handleSubmit} className="max-w-xl mx-auto flex flex-col gap-6">
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Twoje Imię</label>
                 <input 
                   type="text" 
                   placeholder="Jak się nazywasz?"
-                  className="bg-slate-50 border border-slate-200 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+                  className="bg-white/5 border border-white/10 text-white rounded-xl p-4 outline-none focus:ring-2 focus:ring-accent-blue transition-all"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-bold text-slate-700">Wiadomość (jak mamy się skontaktować?)</label>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Wiadomość / Cel</label>
                 <textarea 
-                  placeholder="Napisz krótko, co chciałbyś zoptymalizować oraz np. zostaw nr telefonu..."
-                  className="bg-slate-50 border border-slate-200 rounded-lg p-3 h-32 outline-none focus:ring-2 focus:ring-blue-500 transition-shadow resize-none"
+                  placeholder="Opisz krótko swój problem lub wizję systemu..."
+                  className="bg-white/5 border border-white/10 text-white rounded-xl p-4 h-40 outline-none focus:ring-2 focus:ring-accent-blue transition-all resize-none"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   required
@@ -523,13 +545,13 @@ function App() {
               <button 
                 type="submit" 
                 disabled={isSubmitting || !message.trim()}
-                className={`mt-4 w-full py-4 rounded-xl font-bold text-white transition-colors ${
+                className={`mt-6 w-full py-5 rounded-2xl font-black text-lg text-white transition-all shadow-[0_10px_30px_rgba(59,130,246,0.3)] ${
                   (message.trim() && !isSubmitting) 
-                    ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer shadow-md' 
-                    : 'bg-slate-300 cursor-not-allowed'
+                    ? 'bg-accent-blue hover:scale-[1.02] cursor-pointer' 
+                    : 'bg-slate-800 text-slate-600 cursor-not-allowed'
                 }`}
               >
-                {isSubmitting ? 'Wysyłanie...' : isSuccess ? 'Wysłano pomyślnie! ✅' : 'Wyślij zapytanie'}
+                {isSubmitting ? 'Inicjalizacja...' : isSuccess ? 'Zgłoszenie wysłane! ✅' : 'Rozpocznij projekt'}
               </button>
             </form>
         </section>
