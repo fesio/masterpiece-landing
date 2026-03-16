@@ -1,0 +1,32 @@
+[
+  {
+    "id": "q1",
+    "prompt": "Jaka jest pogoda we Wrocławiu?",
+    "location": "Wrocław",
+    "response": "{\"location\": \"Wrocław\", \"temperature\": \"89°F\", \"condition\": \"Sunny\"}"
+  },
+  {
+    "id": "q2",
+    "prompt": "Podaj temperaturę i opis dla Wrocławia, Polska",
+    "location": "Wrocław, Polska",
+    "response": "{\"location\": \"Wrocław, Polska\", \"temperature\": \"76°F\", \"condition\": \"Rainy\"}"
+  },
+  {
+    "id": "q3",
+    "prompt": "Chcę pogodę z dokładnym opisem podstawowych danych dla Wrocławia",
+    "location": "Wrocław",
+    "response": "{\"location\": \"Wrocław\", \"temperature\": \"16°F\", \"condition\": \"Sunny\"}"
+  },
+  {
+    "id": "q4",
+    "prompt": "Takie samo zapytanie, ale bez lokalizacji",
+    "location": "",
+    "response": "Location is required."
+  },
+  {
+    "id": "q5",
+    "prompt": "Czy możesz podać warunki pogodowe we Wrocławiu i okolice?",
+    "location": "Wrocław i okolice",
+    "response": "{\"location\": \"Wrocław i okolice\", \"temperature\": \"75°F\", \"condition\": \"Sunny\"}"
+  }
+]

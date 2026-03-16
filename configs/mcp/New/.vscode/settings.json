@@ -1,0 +1,10 @@
+{
+  "debug.onTaskErrors": "abort",
+  "chat.mcp.gallery.enabled": true,
+  "gitlens.launchpad.indicator.useColors": true,
+  "chatgpt.openOnStartup": true,
+  "php.validate.executablePath": "",
+  "chat.useClaudeSkills": true,
+  "chat.useNestedAgentsMdFiles": true,
+  "chat.tools.terminal.ignoreDefaultAutoApproveRules": true,
+}
