@@ -454,20 +454,21 @@ function App() {
       <main className="flex-1 w-full max-w-6xl mx-auto p-6 flex flex-col items-center">
         
         <div className="hero-container">
-            <div className="hero-visual" style={{ transform: `translate(calc(-50% + ${mousePos.x}px), calc(-50% + ${mousePos.y}px))` }}>
-                <img src={heroAbstract} alt="AI Neural Core" />
+            <div className="hero-pulse-core"></div>
+            <div className="hero-visual" style={{ transform: `translate(calc(-50% + ${mousePos.x * 2}px), calc(-50% + ${mousePos.y * 2}px))` }}>
+                <img src={heroAbstract} alt="AI Neural Core" className="opacity-40" />
             </div>
-            <h2 className="text-6xl md:text-8xl font-extrabold text-white mb-8 tracking-tighter leading-none text-gradient px-4">
+            <h2 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-[0.85] text-gradient px-4">
               Przekraczamy granice <br/>
-              <span className="text-accent-gradient">możliwości.</span>
+              <span className="text-accent-gradient drop-shadow-[0_0_30px_rgba(59,130,246,0.5)]">możliwości.</span>
             </h2>
-            <p className="text-2xl text-slate-400 font-light max-w-2xl mx-auto">
+            <p className="text-xl md:text-2xl text-slate-400 font-light max-w-2xl mx-auto tracking-tight">
               Od spersonalizowanych asystentów po systemy klasy Enterprise. <br/>
               Twoja wizja zasilana naszą inżynierią.
             </p>
-            <div className="mt-12 flex gap-4">
-                <button onClick={() => detailsRef.current?.scrollIntoView({ behavior: 'smooth' })} className="bg-white text-black font-bold py-4 px-10 rounded-2xl hover:scale-105 transition-transform">Poznaj Ecosystem</button>
-                <button onClick={() => setIsOpen(true)} className="border border-white/20 backdrop-blur-md text-white font-bold py-4 px-10 rounded-2xl hover:bg-white/5 transition-all">Porozmawiaj z AI</button>
+            <div className="mt-12 flex flex-col md:flex-row gap-6">
+                <button onClick={() => detailsRef.current?.scrollIntoView({ behavior: 'smooth' })} className="bg-white text-black font-bold py-5 px-12 rounded-full hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)]">Poznaj Ecosystem</button>
+                <button onClick={() => setIsOpen(true)} className="border border-white/10 backdrop-blur-3xl text-white font-bold py-5 px-12 rounded-full hover:bg-white/5 transition-all">Porozmawiaj z AI</button>
             </div>
         </div>
 
@@ -479,6 +480,11 @@ function App() {
             </div>
 
             <div onClick={() => handleCategorySelect('automation')} className="bento-item bento-automation shimmer group">
+                <div className="automation-nodes">
+                  <div className="node" style={{top: '20%', left: '30%', animationDelay: '0s'}}></div>
+                  <div className="node" style={{top: '50%', left: '70%', animationDelay: '1s'}}></div>
+                  <div className="node" style={{top: '80%', left: '40%', animationDelay: '2s'}}></div>
+                </div>
                 <img src={iconAutomation} alt="Intelligent Automation" />
                 <h3 className="text-2xl font-bold text-white mb-2">Automation</h3>
                 <p className="text-slate-400 text-sm font-light">Autonomiczne procesy budujące Twój spokój.</p>
@@ -503,19 +509,25 @@ function App() {
             </div>
 
             <div onClick={() => handleCategorySelect('software')} className="bento-item bento-software shimmer group h-full">
-                <div className="flex flex-col md:flex-row gap-10 items-center">
-                  <div className="flex-1">
-                    <img src={iconSoftware} alt="Software Engineering" className="w-24 h-24 mb-6" />
-                    <h3 className="text-4xl font-black text-white mb-4">Software Engineering</h3>
-                    <p className="text-slate-300 text-lg font-light leading-relaxed">Full-stack development: od Next.js po klastry backendowe. Budujemy systemy, które definiują rynek.</p>
+                <div className="flex flex-col lg:flex-row gap-10 items-center w-full">
+                  <div className="flex-1 relative z-10">
+                    <div className="code-window mb-6 hidden md:block">
+                      <pre>
+                        <code>
+                          <span className="text-blue-400">const</span> <span className="text-purple-400">AI</span> = <span className="text-white">{"{ core: 'neural' }"}</span>;<br/>
+                          <span className="text-emerald-400">await</span> AI.optimize();<br/>
+                          <span className="text-slate-500">// Deploying to production...</span><br/>
+                          <span className="code-cursor"></span>
+                        </code>
+                      </pre>
+                    </div>
+                    <img src={iconSoftware} alt="Software Engineering" className="w-20 h-20 mb-6 lg:hidden" />
+                    <h3 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tighter">Software Engineering</h3>
+                    <p className="text-slate-300 text-lg font-light leading-relaxed max-w-xl">Budujemy systemy klasy Cloud-Native, które redefiniują branże. Od mikroserwisów po klastry GPU.</p>
                   </div>
-                  <div className="hidden md:flex w-64 h-48 bg-emerald-500/5 rounded-3xl border border-white/5 items-center justify-center relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent"></div>
-                      <code className="text-emerald-400/50 text-[10px] leading-tight">
-                        const app = createSystem();<br/>
-                        env.deploy('production');<br/>
-                        status.ok();
-                      </code>
+                  <div className="hidden lg:flex w-72 h-48 bg-white/5 rounded-3xl border border-white/5 items-center justify-center relative overflow-hidden group-hover:border-emerald-500/50 transition-all">
+                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-transparent"></div>
+                      <img src={iconSoftware} alt="Software" className="" />
                   </div>
                 </div>
             </div>
