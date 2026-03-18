@@ -47,10 +47,10 @@ const contentData = {
     botMsg: "Witaj w dziale strategii. Przeanalizuję Twój pomysł pod kątem tech-stacku i skalowalności. Opowiedz mi o swojej wizji – co chcesz zbudować?"
   },
   automation: {
-    title: "Intelligent Automation",
-    text: "<p>Zbudujemy ekosystem, który pracuje za Ciebie. Od prostych skryptów po złożone workflowy AI integujące dziesiątki narzędzi.</p>",
-    list: ["🛡️ Custom AI Workflows", "🛡️ Browser Automation (Playwright)", "🛡️ Zapier/Make Advanced Integration"],
-    botMsg: "Automatyzacja to moja specjalność. Mogę wyręczyć Cię w powtarzalnych zadaniach. Jakie procesy w Twojej firmie zajmują zbyt dużo czasu?"
+    title: "AI Bots & Process Automation",
+    text: "<p>Budujemy inteligentne boty (WhatsApp, Telegram, Discord, Signal) oraz workflowy, które przejmują powtarzalne zadania w Twojej firmie. Pełna integracja z BlueBubbles i ElevenLabs.</p>",
+    list: ["🛡️ Omnichannel Support Bots", "🛡️ High-Speed Web Scraping", "🛡️ Automated CRM Pipelines"],
+    botMsg: "Witaj w dziale Automatyzacji. Moim zadaniem jest uwolnienie Twojego czasu. Jakie zadanie w Twoim MSP chciałbyś oddelegować botowi?"
   },
   support: {
     title: "Technical Support",
@@ -65,10 +65,10 @@ const contentData = {
     botMsg: "Witaj w module finansowym. Zajmuję się analizą danych rynkowych i budową systemów transakcyjnych. W jakim obszarze szukasz wsparcia?"
   },
   marketing: {
-    title: "Growth Marketing AI",
-    text: "<p>Skalowanie zasięgów dzięki precyzyjnym algorytmom. Marketing, który konwertuje, bo rozumie zachowania użytkowników.</p>",
-    list: ["🎯 AI-Driven Content Strategy", "🎯 Ad Campaign Optimization", "🎯 Automated Lead Generation"],
-    botMsg: "Marketing zasilany danymi to przyszłość. Pomogę Ci zoptymalizować kampanie i zautomatyzować generowanie leadów. Jaki jest Twój cel?"
+    title: "Marketing Automation Systems",
+    text: "<p>Systemy zwiększające sprzedaż bez Twojej ingerencji. Automatyczne generowanie leadów, personalizowane kampanie i analityka behawioralna.</p>",
+    list: ["🎯 AI Lead Generation Systems", "🎯 Automated Content Engine", "🎯 Precision Ad Optimization"],
+    botMsg: "Marketing zasilany danymi to mój konik. Stworzę dla Twojej firmy system, który sam pozyskuje klientów. Jaki jest Twój miesięczny cel sprzedaży?"
   },
   software: {
     title: "Software Engineering",
@@ -459,12 +459,12 @@ function App() {
                 <img src={heroAbstract} alt="AI Neural Core" className="opacity-40" />
             </div>
             <h2 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-[0.85] text-gradient px-4">
-              Przekraczamy granice <br/>
-              <span className="text-accent-gradient drop-shadow-[0_0_30px_rgba(59,130,246,0.5)]">możliwości.</span>
+              Automatyzacja <br/>
+              <span className="text-accent-gradient drop-shadow-[0_0_30px_rgba(59,130,246,0.5)]">Twego Biznesu.</span>
             </h2>
             <p className="text-xl md:text-2xl text-slate-400 font-light max-w-2xl mx-auto tracking-tight">
-              Od spersonalizowanych asystentów po systemy klasy Enterprise. <br/>
-              Twoja wizja zasilana naszą inżynierią.
+              Inteligentne boty i systemy marketingowe skrojone pod <strong className="text-white">Małe Przedsiębiorstwa</strong>. <br/>
+              Skaluj mądrze, oszczędzaj czas, dominuj rynek.
             </p>
             <div className="mt-12 flex flex-col md:flex-row gap-6">
                 <button onClick={() => detailsRef.current?.scrollIntoView({ behavior: 'smooth' })} className="bg-white text-black font-bold py-5 px-12 rounded-full hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)]">Poznaj Ecosystem</button>
@@ -474,20 +474,23 @@ function App() {
 
         <div className="bento-grid w-full mb-12">
             <div onClick={() => handleCategorySelect('analysis')} className="bento-item bento-analysis shimmer group">
+                <div className="expertise-badge">Strategic Architect</div>
                 <img src={iconAnalysis} alt="Idea Analysis" />
-                <h3 className="text-2xl font-bold text-white mb-2">Idea Analysis</h3>
-                <p className="text-slate-400 text-sm font-light">Blueprinty techniczne i weryfikacja wizji.</p>
+                <h3 className="text-2xl font-bold text-white mb-2">Systems Design</h3>
+                <p className="text-slate-400 text-sm font-light">Architektura Twojego globalnego ekosystemu.</p>
             </div>
 
             <div onClick={() => handleCategorySelect('automation')} className="bento-item bento-automation shimmer group">
+                <div className="expertise-badge">Bot Specialist</div>
+                <div className="mini-bot-preview">How can I help you?</div>
                 <div className="automation-nodes">
                   <div className="node" style={{top: '20%', left: '30%', animationDelay: '0s'}}></div>
                   <div className="node" style={{top: '50%', left: '70%', animationDelay: '1s'}}></div>
                   <div className="node" style={{top: '80%', left: '40%', animationDelay: '2s'}}></div>
                 </div>
                 <img src={iconAutomation} alt="Intelligent Automation" />
-                <h3 className="text-2xl font-bold text-white mb-2">Automation</h3>
-                <p className="text-slate-400 text-sm font-light">Autonomiczne procesy budujące Twój spokój.</p>
+                <h3 className="text-2xl font-bold text-white mb-2">AI Bots & Hubs</h3>
+                <p className="text-slate-400 text-sm font-light">Autonomiczne agenty budujące Twoją przewagę.</p>
             </div>
 
             <div onClick={() => handleCategorySelect('support')} className="bento-item bento-support shimmer group">
@@ -503,9 +506,10 @@ function App() {
             </div>
 
             <div onClick={() => handleCategorySelect('marketing')} className="bento-item bento-marketing shimmer group">
+                <div className="expertise-badge">MSP Engine</div>
                 <img src={iconMarketing} alt="Growth Marketing" />
-                <h3 className="text-3xl font-extrabold text-white mb-3">Marketing Mastery</h3>
-                <p className="text-slate-300 text-base font-light">Skalowanie zasięgów oparte na czystych danych.</p>
+                <h3 className="text-3xl font-extrabold text-white mb-3">Marketing Automation</h3>
+                <p className="text-slate-300 text-base font-light">Leady i sprzedaż on-pilot dla małych firm.</p>
             </div>
 
             <div onClick={() => handleCategorySelect('software')} className="bento-item bento-software shimmer group h-full">
@@ -570,7 +574,8 @@ function App() {
         )}
 
         <section className="w-full bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-12 shadow-2xl mb-12">
-            <h2 className="text-4xl font-extrabold text-white mb-8 text-center tracking-tight">Gotowy na <span className="text-accent-blue">skalowanie?</span></h2>
+            <h2 className="text-4xl font-extrabold text-white mb-4 text-center tracking-tight">Gotowy na <span className="text-accent-blue">skalowanie?</span></h2>
+            <p className="text-slate-400 text-center mb-10 text-lg">Specjalizujemy się w rozwiązaniach <strong className="text-white">"Small Business Ready"</strong> – zero zbędnego żargonu, maksimum efektu.</p>
             <form onSubmit={handleSubmit} className="max-w-xl mx-auto flex flex-col gap-6">
               <div className="flex flex-col gap-2">
                 <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Twoje Imię</label>

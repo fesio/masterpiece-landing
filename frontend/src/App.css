@@ -315,6 +315,48 @@ body {
   animation: blink 1s step-end infinite;
 }
 
+/* Expertise Badge */
+.expertise-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  padding: 0.4rem 0.8rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-blue);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+/* Floating Bot Bubble */
+.mini-bot-preview {
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  width: 100px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px 12px 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: #c084fc;
+  animation: float-bubble 6s infinite ease-in-out;
+  backdrop-filter: blur(5px);
+}
+
+@keyframes float-bubble {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
 @keyframes blink {
   from, to { border-color: transparent }
   50% { border-color: #a855f7; }
