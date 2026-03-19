@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createChart, ColorType, LineSeries } from 'lightweight-charts';
-import { Activity, Shield, Terminal, Zap, Server, BarChart3, RefreshCcw } from 'lucide-react';
+import { Activity, Shield, Terminal, Zap, Server, BarChart3, RefreshCcw, Search } from 'lucide-react';
 import { calculateHurstExponent, detectAlphaSignal } from '../lib/quant-utils';
 import { executeAutonomousCycle, triggerPreview } from '../lib/alpha-bridge';
+import { HoverDecode } from './HoverDecode';
 
-const DashModule = ({ title, icon: Icon, children, status = "active" }) => (
-  <div className="dash-module h-full border-r border-b first:border-l last:border-r border-white/10 group">
+const DashModule = ({ title, icon: Icon, children, status = "active", className = "" }) => (
+  <div className={`dash-module h-full border-r border-b first:border-l last:border-r border-white/10 group ${className}`}>
     <div className="module-header bg-black/50 backdrop-blur-sm">
       <div className="flex items-center gap-3">
         <Icon size={14} className="text-accent opacity-70" />
@@ -13,7 +14,7 @@ const DashModule = ({ title, icon: Icon, children, status = "active" }) => (
       </div>
       <div className="flex items-center gap-2">
         <span className="text-[9px] font-mono text-accent opacity-40">{status.toUpperCase()}</span>
-        <div className={`status-indicator ${status === 'active' ? 'bg-accent' : 'bg-green-500'}`} />
+        <div className={`status-indicator ${status === 'active' || status === 'running' ? 'bg-accent' : 'bg-green-500'}`} />
       </div>
     </div>
     <div className="flex-1 relative overflow-hidden bg-[#050505]">
@@ -133,19 +134,18 @@ const FractalModule = () => {
 const AutomationModule = () => {
   const [logs, setLogs] = useState([]);
   const [isRefactoring, setIsRefactoring] = useState(false);
+  const scrollRef = useRef(null);
   
   const handleTriggerRefactor = async () => {
       setIsRefactoring(true);
-      const addLog = (msg) => setLogs(prev => [...prev.slice(-15), msg]);
+      const addLog = (msg) => setLogs(prev => [...prev.slice(-40), `[${new Date().toLocaleTimeString()}] ${msg}`]);
       
       addLog("QUEUE: Ingesting Bitbucket codebase...");
-      
       try {
-          // Real call to the Alpha Cycle with Gatekeeper
           await executeAutonomousCycle(
             "Refactor sensitive HFT filters for O(n) complexity", 
             "// codebase context mock", 
-            "VITE_GEMINI_API_KEY", // Should be pulled from process.env or config
+            "VITE_GEMINI_API_KEY", 
             addLog
           );
           setIsRefactoring(false);
@@ -164,13 +164,28 @@ const AutomationModule = () => {
       "AGENT: Listening for refactor instructions..."
     ];
     setLogs(messages);
+
+    // Peripheral Motion: Heartbeat logs
+    const interval = setInterval(() => {
+      if (!isRefactoring) {
+        setLogs(prev => [...prev.slice(-40), `[IDLE] System Optimizing Big O complexity...`]);
+      }
+    }, 4500);
+
+    return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [logs]);
+
   return (
-    <div className="terminal-container p-6 flex flex-col h-full">
-      <div className="flex-1 overflow-auto space-y-2 mb-4 custom-scrollbar">
+    <div className="terminal-container p-6 flex flex-col h-full bg-black/80">
+      <div ref={scrollRef} className="flex-1 overflow-auto space-y-1 mb-4 custom-scrollbar font-mono text-[11px] leading-tight">
         {logs.map((log, idx) => (
-          <div key={idx} className="terminal-line opacity-80 text-[#00FF41]">
+          <div key={idx} className="terminal-line opacity-80 text-[#00FF41] whitespace-pre-wrap">
             {log}
           </div>
         ))}
@@ -187,44 +202,75 @@ const AutomationModule = () => {
   );
 };
 
-const SecurityAuditTable = () => (
-  <div className="p-6 font-mono text-[10px] overflow-auto">
-    <table className="w-full text-left">
-      <thead>
-        <tr className="border-b border-white/10 opacity-40">
-          <th className="pb-2">UID</th>
-          <th className="pb-2">TARGET</th>
-          <th className="pb-2">CVSS v4</th>
-          <th className="pb-2">STATUS</th>
-        </tr>
-      </thead>
-      <tbody className="opacity-80">
-        <tr className="border-b border-white/5"><td className="py-2">AUD-01</td><td>Caido/Proxy</td><td className="text-red-500">9.2</td><td>RESOLVED</td></tr>
-        <tr className="border-b border-white/5"><td className="py-2">AUD-02</td><td>Logic Bypass</td><td className="text-orange-500">7.5</td><td>PATCHED</td></tr>
-        <tr className="border-b border-white/5"><td className="py-2">AUD-03</td><td>Burp Ext</td><td className="text-yellow-500">6.1</td><td>VERIFIED</td></tr>
-        <tr><td className="py-2">AUD-04</td><td>Agent-Hook</td><td className="text-red-500">8.8</td><td>MONITORING</td></tr>
-      </tbody>
-    </table>
-  </div>
-);
+const SecurityModule = () => {
+    const [scanState, setScanState] = useState(7);
+    
+    // Zeigarnik Effect: Persistent, unresolvable scanning
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setScanState(prev => (prev + 1) % 99);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <div className="p-6 font-mono text-[10px] h-full flex flex-col">
+            <div className="mb-4 flex items-center justify-between text-accent">
+                <div className="flex items-center gap-2">
+                    <Search size={14} className="animate-pulse" />
+                    <span className="tracking-tighter font-bold uppercase">STATUS: ACTIVE_SCANNING [NODE_ALPHA_${scanState}/??]</span>
+                </div>
+                <span className="animate-bounce">_</span>
+            </div>
+            
+            <div className="flex-1 space-y-3 opacity-60">
+                <div className="border-l border-accent/30 pl-3">
+                    <div className="text-white pb-1">VULN_AUDIT_LOG</div>
+                    <HoverDecode text="Recursive scan detected shadow prototype pollution vectors in core orchestrator. Isolation required." />
+                </div>
+                <div className="border-l border-white/10 pl-3">
+                    <div className="text-white pb-1">THREAT_MODEL</div>
+                    <HoverDecode text="HFT latency leakage detected in middleware filters. Re-calculating Big O constraints." />
+                </div>
+            </div>
+
+            <table className="w-full text-left mt-6">
+                <thead>
+                    <tr className="border-b border-white/10 opacity-40">
+                        <th className="pb-2">UID</th>
+                        <th className="pb-2">TARGET</th>
+                        <th className="pb-2">CVSS</th>
+                    </tr>
+                </thead>
+                <tbody className="opacity-80">
+                    <tr className="border-b border-white/5"><td className="py-2">AUD-01</td><td>Caido/Proxy</td><td className="text-red-500">9.2</td></tr>
+                    <tr className="border-b border-white/5"><td className="py-2">AUD-02</td><td>Logic Bypass</td><td className="text-orange-500">7.5</td></tr>
+                    <tr><td className="py-2">AUD-04</td><td>Agent-Hook</td><td className="text-red-500">8.8</td></tr>
+                </tbody>
+            </table>
+        </div>
+    );
+};
 
 const SoftwareStats = () => (
-  <div className="p-10 grid grid-cols-2 gap-8 h-full items-center">
-    <div className="text-center border-r border-white/10">
-      <div className="text-[9px] font-mono opacity-40 uppercase mb-2">HFT Uptime</div>
-      <div className="text-3xl font-black text-white px-2">99.998%</div>
+  <div className="p-10 grid grid-cols-2 gap-8 h-full items-center font-mono">
+    <div className="border-r border-white/10 pr-6">
+      <div className="text-[9px] opacity-40 uppercase mb-2">HFT Uptime</div>
+      <div className="text-3xl font-black text-white">99.998%</div>
+      <div className="mt-2"><HoverDecode text="Zero-packet loss achieved via edge machine distribution." /></div>
     </div>
-    <div className="text-center">
-      <div className="text-[9px] font-mono opacity-40 uppercase mb-2">Avg. Latency</div>
-      <div className="text-3xl font-black text-accent px-2">&lt; 0.82ms</div>
+    <div>
+      <div className="text-[9px] opacity-40 uppercase mb-2">Avg. Latency</div>
+      <div className="text-3xl font-black text-accent">&lt; 0.82ms</div>
+      <div className="mt-2"><HoverDecode text="Execution target minimized for α-signal advantage." /></div>
     </div>
-    <div className="text-center border-r border-white/10">
-      <div className="text-[9px] font-mono opacity-40 uppercase mb-2">Agent Throughput</div>
-      <div className="text-3xl font-black text-white px-2">412 GB/s</div>
+    <div className="border-r border-white/10 pr-6 pt-6 border-t">
+      <div className="text-[9px] opacity-40 uppercase mb-2">Agent Throughput</div>
+      <div className="text-3xl font-black text-white">412 GB/s</div>
     </div>
-    <div className="text-center">
-      <div className="text-[9px] font-mono opacity-40 uppercase mb-2">Cold Start</div>
-      <div className="text-3xl font-black text-white px-2">1.4s</div>
+    <div className="pt-6 border-t">
+      <div className="text-[9px] opacity-40 uppercase mb-2">Cold Start</div>
+      <div className="text-3xl font-black text-white">1.4s</div>
     </div>
   </div>
 );
@@ -236,44 +282,49 @@ const SystemHealth = () => (
             <Server className="text-accent" size={32} />
          </div>
          <div>
-            <div className="text-xs font-mono opacity-40">FLY.IO ORCHESTRATOR</div>
+            <div className="text-xs font-mono opacity-40 uppercase">Cluster Status</div>
             <div className="text-2xl font-black">4 MACHINES ACTIVE</div>
          </div>
       </div>
       <div className="space-y-3 opacity-60 font-mono text-[9px]">
-         <div className="flex justify-between border-b border-white/5 pb-1"><span>ROSERAM-MACHINE-X1</span><span className="text-green-500">HEALTHY</span></div>
-         <div className="flex justify-between border-b border-white/5 pb-1"><span>ROSERAM-MACHINE-X2</span><span className="text-green-500">HEALTHY</span></div>
-         <div className="flex justify-between border-b border-white/5 pb-1"><span>ROSERAM-MACHINE-X3</span><span className="text-yellow-500">IDLE</span></div>
-         <div className="flex justify-between"><span>REPO: FESIOMATYZACJA</span><span className="text-accent">SYNCCED</span></div>
+         <div className="flex justify-between border-b border-white/5 pb-1"><span>ROSERAM-MACHINE-X1</span><span className="text-green-500 font-bold">HEALTHY</span></div>
+         <div className="flex justify-between border-b border-white/5 pb-1"><span>ROSERAM-MACHINE-X2</span><span className="text-green-500 font-bold">HEALTHY</span></div>
+         <div className="flex justify-between border-b border-white/5 pb-1"><span>ROSERAM-MACHINE-X3</span><span className="text-yellow-500 font-bold">IDLE</span></div>
+         <div className="flex justify-between"><span>VCS REPO: MAIN</span><span className="text-accent underline">SYNCCED</span></div>
+      </div>
+      <div className="mt-6">
+         <HoverDecode text="Infrastructure synchronized across AMS and WAW regions for failover resilience." />
       </div>
    </div>
 );
 
 export const MainDashboard = () => (
-  <div className="w-full flex items-center justify-center py-20 px-6">
-    <div className="dashboard-grid shadow-2xl overflow-hidden">
-      <DashModule title="Quant / Alpha Algorithm" icon={BarChart3} status="active">
-        <QuantModule />
-      </DashModule>
-      
-      <DashModule title="Math / Fractal Fractal" icon={Activity} status="active">
-        <FractalModule />
-      </DashModule>
-      
-      <DashModule title="Automation / Orchestrator" icon={Terminal} status="running">
+  <div className="w-full h-screen flex items-center justify-center p-0">
+    <div className="dashboard-grid shadow-2xl overflow-hidden h-full">
+      {/* Saccadic Asymmetry: Automation at TL */}
+      <DashModule title="Automation / Orchestrator" icon={Terminal} status="running" className="col-start-1 row-start-1">
         <AutomationModule />
       </DashModule>
       
-      <DashModule title="Audit / Vuln Scanner" icon={Shield} status="active">
-        <SecurityAuditTable />
+      <DashModule title="Math / Fractal Analysis" icon={Activity} status="active" className="col-start-2 row-start-1">
+        <FractalModule />
       </DashModule>
       
-      <DashModule title="System / Closed Software" icon={Zap} status="active">
+      <DashModule title="Audit / Vuln Scanner" icon={Shield} status="active" className="col-start-3 row-start-1">
+        <SecurityModule />
+      </DashModule>
+      
+      <DashModule title="System / Closed Software" icon={Zap} status="active" className="col-start-1 row-start-2">
         <SoftwareStats />
       </DashModule>
       
-      <DashModule title="Infrastructure / Fly.io" icon={Server} status="healthy">
+      <DashModule title="Infrastructure / Fly.io" icon={Server} status="healthy" className="col-start-2 row-start-2">
         <SystemHealth />
+      </DashModule>
+      
+      {/* Saccadic Asymmetry: Quant at BR */}
+      <DashModule title="Quant / Alpha Algorithm" icon={BarChart3} status="active" className="col-start-3 row-start-2">
+        <QuantModule />
       </DashModule>
     </div>
   </div>

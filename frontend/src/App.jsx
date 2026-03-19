@@ -16,6 +16,7 @@ import {
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import './App.css';
 import { MainDashboard } from './components/MainDashboard';
+import { useAnomalyEngine } from './hooks/useAnomalyEngine';
 
 // Assets
 import heroAbstract from './assets/hero_abstract.png';
@@ -360,16 +361,11 @@ Odpisz uwzględniając instrukcje reakcji, bardzo naturalnie:`
 function App() {
   const [showSplash, setShowSplash] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [openChat, setOpenChat] = useState({ open: false, msg: null });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  
-  // Stany dla formularza web3forms
-  const [name, setName] = useState('');
-  const [message, setMessage] = useState('');
-  const detailsRef = useRef(null);
 
+  // Dopamine Loop: Anomaly Engine injection
+  useAnomalyEngine(0.05);
+  
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePos({
@@ -445,29 +441,16 @@ function App() {
   const currentData = selectedCategory ? contentData[selectedCategory] : null;
 
   return (
-    <div className="text-white min-h-screen flex flex-col font-mono bg-black overflow-hidden relative">
+    <div className="text-white min-h-screen flex flex-col font-mono bg-black overflow-hidden relative select-none">
       <div className="bg-grid"></div>
       
       <WarpSpeedPreloader isVisible={showSplash} />
       
-      <div className={`transition-opacity duration-1000 ${showSplash ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100'}`}>
-      <header className="bg-transparent border-b border-white/5 p-6 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-white tracking-widest font-mono uppercase">Fesiomatyzacja</h1>
-            <nav className="hidden md:flex gap-8 font-semibold text-white/60">
-                <span className="hover:text-white transition-colors cursor-pointer text-sm tracking-widest uppercase">Ecosystem</span>
-                <span className="hover:text-white transition-colors cursor-pointer text-sm tracking-widest uppercase">OS Projects</span>
-                <span className="hover:text-white transition-colors cursor-pointer text-sm tracking-widest uppercase">Contact</span>
-            </nav>
-        </div>
-      </header>
-
-      <main className="flex-1 w-full flex flex-col items-center justify-center p-4 relative z-10 overflow-auto">
-        <MainDashboard />
-      </main>
+      <div className={`transition-opacity duration-1000 h-screen w-screen bg-black ${showSplash ? 'opacity-0' : 'opacity-100'}`}>
+        <main className="h-full w-full flex items-center justify-center p-0 overflow-hidden relative z-10">
+          <MainDashboard />
+        </main>
       </div>
-
-      {!showSplash && <AIChat openFromCategory={openChat.open} overrideMsg={openChat.msg} />}
     </div>
   );
 }
