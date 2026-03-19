@@ -136,18 +136,21 @@ const AutomationModule = () => {
   
   const handleTriggerRefactor = async () => {
       setIsRefactoring(true);
-      setLogs(prev => [...prev, "QUEUE: Ingesting Bitbucket codebase..."]);
+      const addLog = (msg) => setLogs(prev => [...prev.slice(-15), msg]);
+      
+      addLog("QUEUE: Ingesting Bitbucket codebase...");
       
       try {
-          // Simulation of the bridge logic (needs env keys in prod)
-          setLogs(prev => [...prev, "ORCHESTRATOR: Gemini 1.5 Pro reasoning..."]);
-          setTimeout(() => {
-              setLogs(prev => [...prev, "SUCCESS: Code refactored via [α-refactor]"]);
-              setLogs(prev => [...prev, "LIVE_PREVIEW: Fly.io Machine updated (Hot Patch)"]);
-              setIsRefactoring(false);
-          }, 3000);
+          // Real call to the Alpha Cycle with Gatekeeper
+          await executeAutonomousCycle(
+            "Refactor sensitive HFT filters for O(n) complexity", 
+            "// codebase context mock", 
+            "VITE_GEMINI_API_KEY", // Should be pulled from process.env or config
+            addLog
+          );
+          setIsRefactoring(false);
       } catch (e) {
-          setLogs(prev => [...prev, `ERROR: ${e.message}`]);
+          addLog(`ERROR: ${e.message}`);
           setIsRefactoring(false);
       }
   };
@@ -155,6 +158,7 @@ const AutomationModule = () => {
   useEffect(() => {
     const messages = [
       "SYSTEM: Autonomous Orchestrator v2.1.0 online",
+      "α-GATEKEEPER: AST Verifier Active [Security CVSS v4]",
       "QUANT: α-signal stable at H ≈ 0.32",
       "NETWORK: Fly.io Machines heartbeat [OK]",
       "AGENT: Listening for refactor instructions..."
