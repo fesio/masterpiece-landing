@@ -15,6 +15,7 @@ import {
 } from 'chart.js';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import './App.css';
+import { MainDashboard } from './components/MainDashboard';
 
 // Assets
 import heroAbstract from './assets/hero_abstract.png';
@@ -82,9 +83,19 @@ const contentData = {
 // --- Komponent: Preloader 3D (Warp Speed Canvas) ---
 function WarpSpeedPreloader({ isVisible }) {
   const canvasRef = React.useRef(null);
+  const [glitchText, setGlitchText] = useState("");
+  const fullText = "Fesiomatyzacja";
 
   useEffect(() => {
     if (!isVisible) return;
+    
+    // Typing effect
+    let charIndex = 0;
+    const typingInterval = setInterval(() => {
+      setGlitchText(fullText.slice(0, charIndex + 1));
+      charIndex++;
+      if (charIndex >= fullText.length) clearInterval(typingInterval);
+    }, 80);
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -161,19 +172,18 @@ function WarpSpeedPreloader({ isVisible }) {
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
+      clearInterval(typingInterval);
     };
   }, [isVisible]);
 
   return (
-    <div className={`fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-1000 ${!isVisible ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+    <div className={`fixed inset-0 z-[100] transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
-      <div className="relative z-10 text-center flex flex-col items-center justify-center pointer-events-none p-4 w-full">
-        <h1 className="text-white text-4xl md:text-5xl font-extrabold tracking-tight drop-shadow-2xl">
-          Twoja innowacja. Moja inżynieria poznawcza.
-        </h1>
-        <span className="text-purple-400 font-semibold text-xl md:text-2xl mt-4 block" style={{textShadow: '0 0 10px rgba(168,85,247,0.8)'}}>
-          Upraszczam systemy, abyś Ty odzyskał swój czas
-        </span>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 text-center pointer-events-none">
+         <div className="text-4xl md:text-6xl font-black text-white tracking-[0.3em] font-mono glitch-text uppercase" data-text={glitchText}>
+            {glitchText}<span className="animate-pulse">_</span>
+         </div>
+         <p className="text-accent-blue text-xs mt-4 tracking-[1em] font-mono opacity-50 uppercase">Autonomous Intelligence</p>
       </div>
     </div>
   );
@@ -408,7 +418,7 @@ function App() {
     formData.append("access_key", "dccd5b2d-0139-4d07-8ce6-3b567caf5fde");
     formData.append("name", name);
     formData.append("message", message);
-    formData.append("subject", "Nowe zgłoszenie z Landing Page - TechPartner.AI");
+    formData.append("subject", "Nowe zgłoszenie: Fesiomatyzacja | AI Autonomous Hub");
 
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
@@ -435,14 +445,15 @@ function App() {
   const currentData = selectedCategory ? contentData[selectedCategory] : null;
 
   return (
-    <div className="text-white min-h-screen flex flex-col font-sans bg-[#020617] overflow-x-hidden">
+    <div className="text-white min-h-screen flex flex-col font-mono bg-black overflow-hidden relative">
+      <div className="bg-grid"></div>
       
       <WarpSpeedPreloader isVisible={showSplash} />
       
       <div className={`transition-opacity duration-1000 ${showSplash ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100'}`}>
       <header className="bg-transparent border-b border-white/5 p-6 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <h1 className="text-2xl font-extrabold text-white tracking-tighter">TECH<span className="text-accent-blue">PARTNER</span></h1>
+            <h1 className="text-2xl font-bold text-white tracking-widest font-mono uppercase">Fesiomatyzacja</h1>
             <nav className="hidden md:flex gap-8 font-semibold text-white/60">
                 <span className="hover:text-white transition-colors cursor-pointer text-sm tracking-widest uppercase">Ecosystem</span>
                 <span className="hover:text-white transition-colors cursor-pointer text-sm tracking-widest uppercase">OS Projects</span>
@@ -451,167 +462,8 @@ function App() {
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-6xl mx-auto p-6 flex flex-col items-center">
-        
-        <div className="hero-container">
-            <div className="hero-pulse-core"></div>
-            <div className="hero-visual" style={{ transform: `translate(calc(-50% + ${mousePos.x * 2}px), calc(-50% + ${mousePos.y * 2}px))` }}>
-                <img src={heroAbstract} alt="AI Neural Core" className="opacity-40" />
-            </div>
-            <h2 className="text-6xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-[0.85] text-gradient px-4">
-              Automatyzacja <br/>
-              <span className="text-accent-gradient drop-shadow-[0_0_30px_rgba(59,130,246,0.5)]">Twego Biznesu.</span>
-            </h2>
-            <p className="text-xl md:text-2xl text-slate-400 font-light max-w-2xl mx-auto tracking-tight">
-              Inteligentne boty i systemy marketingowe skrojone pod <strong className="text-white">Małe Przedsiębiorstwa</strong>. <br/>
-              Skaluj mądrze, oszczędzaj czas, dominuj rynek.
-            </p>
-            <div className="mt-12 flex flex-col md:flex-row gap-6">
-                <button onClick={() => detailsRef.current?.scrollIntoView({ behavior: 'smooth' })} className="bg-white text-black font-bold py-5 px-12 rounded-full hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)]">Poznaj Ecosystem</button>
-                <button onClick={() => setIsOpen(true)} className="border border-white/10 backdrop-blur-3xl text-white font-bold py-5 px-12 rounded-full hover:bg-white/5 transition-all">Porozmawiaj z AI</button>
-            </div>
-        </div>
-
-        <div className="bento-grid w-full mb-12">
-            <div onClick={() => handleCategorySelect('analysis')} className="bento-item bento-analysis shimmer group">
-                <div className="expertise-badge">Strategic Architect</div>
-                <img src={iconAnalysis} alt="Idea Analysis" />
-                <h3 className="text-2xl font-bold text-white mb-2">Systems Design</h3>
-                <p className="text-slate-400 text-sm font-light">Architektura Twojego globalnego ekosystemu.</p>
-            </div>
-
-            <div onClick={() => handleCategorySelect('automation')} className="bento-item bento-automation shimmer group">
-                <div className="expertise-badge">Bot Specialist</div>
-                <div className="mini-bot-preview">How can I help you?</div>
-                <div className="automation-nodes">
-                  <div className="node" style={{top: '20%', left: '30%', animationDelay: '0s'}}></div>
-                  <div className="node" style={{top: '50%', left: '70%', animationDelay: '1s'}}></div>
-                  <div className="node" style={{top: '80%', left: '40%', animationDelay: '2s'}}></div>
-                </div>
-                <img src={iconAutomation} alt="Intelligent Automation" />
-                <h3 className="text-2xl font-bold text-white mb-2">AI Bots & Hubs</h3>
-                <p className="text-slate-400 text-sm font-light">Autonomiczne agenty budujące Twoją przewagę.</p>
-            </div>
-
-            <div onClick={() => handleCategorySelect('support')} className="bento-item bento-support shimmer group">
-                <img src={iconSupport} alt="Technical Support" />
-                <h3 className="text-2xl font-bold text-white mb-2">Tech Support</h3>
-                <p className="text-slate-400 text-sm font-light">Stała opieka i debugowanie krytyczne.</p>
-            </div>
-
-            <div onClick={() => handleCategorySelect('finance')} className="bento-item bento-finance shimmer group">
-                <img src={iconFinance} alt="Finance AI" />
-                <h3 className="text-3xl font-extrabold text-white mb-3">Finance & Strategy</h3>
-                <p className="text-slate-300 text-base font-light">Systemy tradingowe i analityka finansowa ML.</p>
-            </div>
-
-            <div onClick={() => handleCategorySelect('marketing')} className="bento-item bento-marketing shimmer group">
-                <div className="expertise-badge">MSP Engine</div>
-                <img src={iconMarketing} alt="Growth Marketing" />
-                <h3 className="text-3xl font-extrabold text-white mb-3">Marketing Automation</h3>
-                <p className="text-slate-300 text-base font-light">Leady i sprzedaż on-pilot dla małych firm.</p>
-            </div>
-
-            <div onClick={() => handleCategorySelect('software')} className="bento-item bento-software shimmer group h-full">
-                <div className="flex flex-col lg:flex-row gap-10 items-center w-full">
-                  <div className="flex-1 relative z-10">
-                    <div className="code-window mb-6 hidden md:block">
-                      <pre>
-                        <code>
-                          <span className="text-blue-400">const</span> <span className="text-purple-400">AI</span> = <span className="text-white">{"{ core: 'neural' }"}</span>;<br/>
-                          <span className="text-emerald-400">await</span> AI.optimize();<br/>
-                          <span className="text-slate-500">// Deploying to production...</span><br/>
-                          <span className="code-cursor"></span>
-                        </code>
-                      </pre>
-                    </div>
-                    <img src={iconSoftware} alt="Software Engineering" className="w-20 h-20 mb-6 lg:hidden" />
-                    <h3 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tighter">Software Engineering</h3>
-                    <p className="text-slate-300 text-lg font-light leading-relaxed max-w-xl">Budujemy systemy klasy Cloud-Native, które redefiniują branże. Od mikroserwisów po klastry GPU.</p>
-                  </div>
-                  <div className="hidden lg:flex w-72 h-48 bg-white/5 rounded-3xl border border-white/5 items-center justify-center relative overflow-hidden group-hover:border-emerald-500/50 transition-all">
-                      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-transparent"></div>
-                      <img src={iconSoftware} alt="Software" className="" />
-                  </div>
-                </div>
-            </div>
-        </div>
-
-        {selectedCategory && currentData && (
-          <div ref={detailsRef} className="w-full bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-10 shadow-2xl mb-12 animate-in fade-in slide-in-from-bottom-8">
-              <div className="flex flex-col lg:flex-row gap-12 items-start">
-                  <div className="flex-1 w-full">
-                      <span className="text-accent-blue font-bold uppercase tracking-widest text-xs mb-2 block">Solution Insight</span>
-                      <h3 className="text-4xl font-extrabold text-white mb-6 leading-tight">{currentData.title}</h3>
-                      <div className="prose prose-invert max-w-none mb-8 text-slate-300 leading-relaxed text-lg" dangerouslySetInnerHTML={{ __html: currentData.text }}></div>
-                      <ul className="space-y-4 text-white/80 font-medium mb-10">
-                        {currentData.list.map((item, idx) => (
-                          <li key={idx} className="flex items-center gap-3">
-                            <span className="w-1.5 h-1.5 bg-accent-blue rounded-full"></span>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                      <button className="bg-gradient-to-r from-accent-blue to-accent-purple hover:scale-105 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] text-white font-bold py-4 px-10 rounded-2xl transition-all w-full md:w-auto">
-                          Wybierz to rozwiązanie
-                      </button>
-                  </div>
-                  <div className="flex-1 w-full flex justify-center items-center bg-black/20 rounded-3xl p-8 border border-white/5">
-                      <div className="relative w-full h-[400px]">
-                        {currentData.chartType === 'bar' && (
-                          <Bar data={currentData.chartData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { ticks: { color: '#64748b' }, grid: { display: false } } } }} />
-                        )}
-                        {currentData.chartType === 'doughnut' && (
-                          <Doughnut data={currentData.chartData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { family: 'Outfit', size: 12 } } } } }} />
-                        )}
-                        {currentData.chartType === 'line' && (
-                          <Line data={currentData.chartData} options={{ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { ticks: { color: '#64748b' }, grid: { display: false } } } }} />
-                        )}
-                      </div>
-                  </div>
-              </div>
-          </div>
-        )}
-
-        <section className="w-full bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-12 shadow-2xl mb-12">
-            <h2 className="text-4xl font-extrabold text-white mb-4 text-center tracking-tight">Gotowy na <span className="text-accent-blue">skalowanie?</span></h2>
-            <p className="text-slate-400 text-center mb-10 text-lg">Specjalizujemy się w rozwiązaniach <strong className="text-white">"Small Business Ready"</strong> – zero zbędnego żargonu, maksimum efektu.</p>
-            <form onSubmit={handleSubmit} className="max-w-xl mx-auto flex flex-col gap-6">
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Twoje Imię</label>
-                <input 
-                  type="text" 
-                  placeholder="Jak się nazywasz?"
-                  className="bg-white/5 border border-white/10 text-white rounded-xl p-4 outline-none focus:ring-2 focus:ring-accent-blue transition-all"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Wiadomość / Cel</label>
-                <textarea 
-                  placeholder="Opisz krótko swój problem lub wizję systemu..."
-                  className="bg-white/5 border border-white/10 text-white rounded-xl p-4 h-40 outline-none focus:ring-2 focus:ring-accent-blue transition-all resize-none"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  required
-                ></textarea>
-              </div>
-              <button 
-                type="submit" 
-                disabled={isSubmitting || !message.trim()}
-                className={`mt-6 w-full py-5 rounded-2xl font-black text-lg text-white transition-all shadow-[0_10px_30px_rgba(59,130,246,0.3)] ${
-                  (message.trim() && !isSubmitting) 
-                    ? 'bg-accent-blue hover:scale-[1.02] cursor-pointer' 
-                    : 'bg-slate-800 text-slate-600 cursor-not-allowed'
-                }`}
-              >
-                {isSubmitting ? 'Inicjalizacja...' : isSuccess ? 'Zgłoszenie wysłane! ✅' : 'Rozpocznij projekt'}
-              </button>
-            </form>
-        </section>
-
+      <main className="flex-1 w-full flex flex-col items-center justify-center p-4 relative z-10 overflow-auto">
+        <MainDashboard />
       </main>
       </div>
 
