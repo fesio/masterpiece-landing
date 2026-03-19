@@ -1,10 +1,8 @@
-/**
- * Fesiomatyzacja: α-bridge.js
- * Core logic for Automation / Orchestrator & Live Infrastructure Injection
- */
+import { getFormattedSystemContext } from './agentic-rag';
 
 const BITBUCKET_API_BASE = 'https://api.bitbucket.org/2.0';
 const FLY_API_BASE = 'https://api.machines.dev/v1';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent';
 
 /**
  * 1. CONTEXT PACKING: Ingest Codebase
@@ -154,4 +152,54 @@ export const bitbucketCommitBot = async (workspace, repoSlug, filePath, content,
     });
 
     return response.ok;
+};
+
+/**
+ * 5. AGENTIC CLI DISPATCHER
+ * Dispatches commands via LLM with full context injection.
+ */
+export const dispatchCommand = async (prompt, addLog, apiKey) => {
+    const context = getFormattedSystemContext();
+    const fullSystemPrompt = `
+        You are the Alpha Core of 'Fesiomatyzacja'. 
+        [SYSTEM STATE]: ${context}
+        Respond with maximum conciseness and zero redundancy. 
+        Classify the [USER COMMAND] into one of these vectors:
+        - [QUERY]: General questions about the system or external data. Return the direct answer.
+        - [PARAM_SHIFT]: Commands altering the Quant strategy. Output only JSON update (e.g. {"alpha": "trend"}).
+        - [REFACTOR]: Commands to modify codebase. Output only JSON for codebase changes.
+
+        IMPORTANT: Omit greetings. Base all reasoning on the provided [SYSTEM STATE].
+    `;
+
+    addLog(`α-node> Dispatched: "${prompt}"`);
+    
+    try {
+        const response = await fetch(GEMINI_API_URL + `?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ 
+                    parts: [{ text: `${fullSystemPrompt}\n[USER COMMAND]: ${prompt}` }] 
+                }]
+            })
+        });
+
+        const data = await response.json();
+        const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "NO_RESPONSE";
+        
+        // Router Logic
+        if (aiResponse.includes('[QUERY]') || !aiResponse.startsWith('{')) {
+            const clean = aiResponse.replace('[QUERY]', '').trim();
+            return { type: 'query', content: clean };
+        } else if (aiResponse.includes('[PARAM_SHIFT]') || (aiResponse.startsWith('{') && aiResponse.includes('alpha'))) {
+            return { type: 'param_shift', content: aiResponse };
+        } else if (aiResponse.includes('[REFACTOR]')) {
+            return { type: 'refactor', content: aiResponse };
+        }
+        
+        return { type: 'query', content: aiResponse };
+    } catch (e) {
+        return { type: 'error', content: `CRITICAL ERROR: ${e.message}` };
+    }
 };
