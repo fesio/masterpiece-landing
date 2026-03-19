@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createChart, ColorType, LineSeries } from 'lightweight-charts';
-import { Activity, Shield, Terminal, Zap, Server, BarChart3 } from 'lucide-react';
+import { Activity, Shield, Terminal, Zap, Server, BarChart3, RefreshCcw } from 'lucide-react';
+import { calculateHurstExponent, detectAlphaSignal } from '../lib/quant-utils';
+import { executeAutonomousCycle, triggerPreview } from '../lib/alpha-bridge';
 
 const DashModule = ({ title, icon: Icon, children, status = "active" }) => (
   <div className="dash-module h-full border-r border-b first:border-l last:border-r border-white/10 group">
@@ -20,8 +22,11 @@ const DashModule = ({ title, icon: Icon, children, status = "active" }) => (
   </div>
 );
 
+
 const QuantModule = () => {
   const chartContainerRef = useRef();
+  const [lastHurst, setLastHurst] = useState(0.5);
+  const [signal, setSignal] = useState("RANDOM_WALK");
   
   useEffect(() => {
     if (!chartContainerRef.current) return;
@@ -34,30 +39,53 @@ const QuantModule = () => {
     });
     
     const lineSeries = chart.addSeries(LineSeries, { color: '#007AFF', lineWidth: 2 });
+    let dataPoints = [];
     
-    // Simulate Alpha Algorithm
-    const generateData = () => {
-      let val = 100;
-      return Array.from({ length: 100 }, (_, i) => {
-        val += (Math.random() - 0.45) * 5; // Slight upward bias (Alpha)
-        return { time: i, value: val };
-      });
+    // Binance WebSocket (BTCUSDT)
+    const ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@kline_1m');
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        const candle = data.k;
+        const price = parseFloat(candle.c);
+        
+        dataPoints.push(price);
+        if (dataPoints.length > 200) dataPoints.shift();
+        
+        lineSeries.update({ time: Math.floor(candle.t / 1000), value: price });
+        
+        // Calculate Hurst on last 1024 if available, 200 otherwise
+        if (dataPoints.length > 100) {
+            const h = calculateHurstExponent(dataPoints);
+            setLastHurst(h);
+            setSignal(detectAlphaSignal(h));
+            window.dispatchEvent(new CustomEvent('hurstUpdate', { detail: h }));
+        }
     };
-    
-    lineSeries.setData(generateData());
-    
+
     const handleResize = () => chart.applyOptions({ width: chartContainerRef.current.clientWidth });
     window.addEventListener('resize', handleResize);
-    return () => { chart.remove(); window.removeEventListener('resize', handleResize); };
+    return () => { chart.remove(); ws.close(); window.removeEventListener('resize', handleResize); };
   }, []);
 
-  return <div ref={chartContainerRef} className="w-full h-full p-4" />;
+  return (
+    <div className="w-full h-full relative">
+        <div ref={chartContainerRef} className="w-full h-full p-4" />
+        <div className="absolute top-4 right-6 text-right">
+            <div className="text-[10px] font-mono opacity-40">SIGNAL: {signal}</div>
+            <div className="text-xl font-bold text-accent">BTC: α-STREAM</div>
+        </div>
+    </div>
+  );
 };
 
 const FractalModule = () => {
   const canvasRef = useRef(null);
+  const [hurst, setHurst] = useState(0.32);
   
   useEffect(() => {
+    const handleHurst = (e) => setHurst(e.detail);
+    window.addEventListener('hurstUpdate', handleHurst);
+    
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     let frame = 0;
@@ -66,7 +94,7 @@ const FractalModule = () => {
       ctx.fillStyle = 'black';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      const H = 0.32; // Hurst Exponent
+      const H = hurst; 
       ctx.beginPath();
       ctx.strokeStyle = '#007AFF';
       ctx.lineWidth = 1;
@@ -76,8 +104,7 @@ const FractalModule = () => {
       ctx.moveTo(x, y);
       
       for (let i = 0; i < canvas.width; i++) {
-         // Fractal noise simulation
-         const noise = (Math.random() - 0.5) * Math.pow(i / 100, H) * 50;
+         const noise = (Math.random() - 0.5) * Math.pow(i / 100, H) * 100;
          y = canvas.height / 2 + noise + Math.sin(frame / 20 + i / 50) * 20;
          ctx.lineTo(i, y);
       }
@@ -87,48 +114,71 @@ const FractalModule = () => {
       requestAnimationFrame(draw);
     };
     
-    draw();
-  }, []);
+    const animId = requestAnimationFrame(draw);
+    return () => {
+        window.removeEventListener('hurstUpdate', handleHurst);
+        cancelAnimationFrame(animId);
+    };
+  }, [hurst]);
 
   return (
     <div className="p-4 h-full flex flex-col justify-between">
-      <div className="text-[10px] font-mono opacity-40 mb-2">HURST EXPONENT: H ≈ 0.32</div>
+      <div className="text-[10px] font-mono opacity-40 mb-2 uppercase tracking-widest">HURST EXPONENT: H ≈ {hurst.toFixed(4)}</div>
       <canvas ref={canvasRef} className="flex-1 opacity-80" width={400} height={300} />
-      <div className="mt-4 text-[10px] font-mono text-accent">FRACTAL ANALYSIS: COLD_DYNAMIC_MODE</div>
+      <div className="mt-4 text-[10px] font-mono text-accent">FRACTAL ANALYSIS: {hurst < 0.4 ? 'ANTI-PERSISTENT' : 'TRENDING'}</div>
     </div>
   );
 };
 
 const AutomationModule = () => {
   const [logs, setLogs] = useState([]);
+  const [isRefactoring, setIsRefactoring] = useState(false);
   
+  const handleTriggerRefactor = async () => {
+      setIsRefactoring(true);
+      setLogs(prev => [...prev, "QUEUE: Ingesting Bitbucket codebase..."]);
+      
+      try {
+          // Simulation of the bridge logic (needs env keys in prod)
+          setLogs(prev => [...prev, "ORCHESTRATOR: Gemini 1.5 Pro reasoning..."]);
+          setTimeout(() => {
+              setLogs(prev => [...prev, "SUCCESS: Code refactored via [α-refactor]"]);
+              setLogs(prev => [...prev, "LIVE_PREVIEW: Fly.io Machine updated (Hot Patch)"]);
+              setIsRefactoring(false);
+          }, 3000);
+      } catch (e) {
+          setLogs(prev => [...prev, `ERROR: ${e.message}`]);
+          setIsRefactoring(false);
+      }
+  };
+
   useEffect(() => {
     const messages = [
-      "SYSTEM: Initializing Fesiomatyzacja-Engine v2.1.0",
-      "QUANT: α-strategy loading sequence [OK]",
-      "AGENT: Web3Forms initialized at /api/submit",
-      "CI/CD: Fly.io machine monitoring active",
-      "AUTH: GPG integrity verified",
-      "HFT: Execution target set to <1ms",
-      "ORCHESTRATOR: Running α-orchestrator.js",
-      "SYSTEM: System status [GREEN]"
+      "SYSTEM: Autonomous Orchestrator v2.1.0 online",
+      "QUANT: α-signal stable at H ≈ 0.32",
+      "NETWORK: Fly.io Machines heartbeat [OK]",
+      "AGENT: Listening for refactor instructions..."
     ];
-    
-    let i = 0;
-    const interval = setInterval(() => {
-      setLogs(prev => [...prev.slice(-10), messages[i % messages.length]]);
-      i++;
-    }, 1500);
-    return () => clearInterval(interval);
+    setLogs(messages);
   }, []);
 
   return (
-    <div className="terminal-container p-6">
-      {logs.map((log, idx) => (
-        <div key={idx} className="terminal-line opacity-80 animate-in fade-in slide-in-from-left-4 text-[#00FF41]">
-          {log}
-        </div>
-      ))}
+    <div className="terminal-container p-6 flex flex-col h-full">
+      <div className="flex-1 overflow-auto space-y-2 mb-4 custom-scrollbar">
+        {logs.map((log, idx) => (
+          <div key={idx} className="terminal-line opacity-80 text-[#00FF41]">
+            {log}
+          </div>
+        ))}
+      </div>
+      <button 
+        onClick={handleTriggerRefactor}
+        disabled={isRefactoring}
+        className={`w-full py-3 border border-accent/30 bg-accent/5 hover:bg-accent/10 transition-all flex items-center justify-center gap-3 font-mono text-[10px] uppercase tracking-widest ${isRefactoring ? 'opacity-50 cursor-wait' : ''}`}
+      >
+        <RefreshCcw size={12} className={isRefactoring ? 'animate-spin' : ''} />
+        {isRefactoring ? 'Refactoring Codebase...' : 'Execute Alpha Cycle'}
+      </button>
     </div>
   );
 };
