@@ -1,15 +1,23 @@
-# Kryptobot-454807
+# Fesiomatyzacja – Agentic CI/CD & Quant Research Hub
 
-Systemic Cleanup & Hexagonal Consolidation.
+Welcome to **Fesiomatyzacja**, an autonomous engineering ecosystem designed for high-frequency automation and strategic alpha research.
 
-## Project Structure / Folder Map
+## Project Pillars
 
-- `_LEGACY_ARCHIVE_/` - Contains old logics and migrated tools (`trading-research-lab-starter`, `moltbot`, `openclaw`).
-- `configs/mcp/` - Consolidated MCP configurations for full portability.
-- `cmd/engine/` - Main engine entry points.
-- `internal/` - Internal project logic and packages.
-- `k8s/` - Kubernetes configurations.
-- `scripts/` - Auxiliary scripts.
-- `go.mod` / `go.sum` - Go dependencies.
+- **Autonomous Engineering**: Agentic workflows for CI/CD and system orchestration.
+- **Alpha Strategy**: Quantitative research and automated market analytics.
+- **Modular Dashboard**: A high-speed, 1px-grid interface for real-time monitoring.
 
-*Note: The project operates under zero system impact constraints with protected GPG/Kube configurations.*
+## Stack
+
+- **Frontend**: React 19, Vite, Tailwind CSS (AI Studio Aesthetic).
+- **Visualization**: Canvas API (Fractals), Lightweight Charts (Quant).
+- **Deployment**: Optimized for Fly.io with auto-start/stop logic.
+- **Integrations**: Direct GitHub/Bitbucket hooks for AI-driven code pushing.
+
+## Architecture
+
+The project is moving towards a **Modular Dashboard** layout, replacing the traditional landing page with a technical, data-driven command center.
+
+---
+*Proprietary Intelligence Core by Fesiomatyzacja.*
